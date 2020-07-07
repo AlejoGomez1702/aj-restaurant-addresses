@@ -1,0 +1,7 @@
+{
+  "name": "aj-restaurant-addresses",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
