@@ -1,20 +1,72 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
+<!-- Cabecera inicial con la info del restaurante -->
+<ion-header [translucent]="true" color="light" *ngIf="firstHeader"> 
+  <!-- Nombre del restaurante y boton de información -->
+  <ion-toolbar color="dark">
     <ion-buttons slot="primary">
       <ion-button color="secondary">
         <ion-icon name="alert-circle-outline" slot="icon-only"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title>La Perrada De Chalo</ion-title>
+    <ion-title size="small">La Perrada De Chalo</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 1</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<!-- Cabecera con el listado de categorias de productos disponibles -->
+<ion-header [translucent]="true" color="light" *ngIf="!firstHeader">
+  <ion-toolbar color="dark">    
+    <ion-segment scrollable (ionChange)="segmentChanged($event)" value="{{ categoriesMenu[0] }}">
+      <!-- Menu -->
+      <ng-container *ngFor="let category of categoriesMenu">
+        <ion-segment-button value="{{ category }}">
+          <ion-label>{{ category }}</ion-label>
+        </ion-segment-button>
+      </ng-container>
 
-  <app-explore-container name="Tab 1 page"></app-explore-container>
+      <!-- Bebidas -->
+      <ng-container *ngFor="let category of categoriesDrinks">
+        <ion-segment-button value="{{ category }}">
+          {{ category }}
+        </ion-segment-button>
+      </ng-container>
+    </ion-segment>
+  </ion-toolbar>
+</ion-header> 
+
+<!-- ***********CONTENT***********CONTENT***********CONTENT***********CONTENT*********** -->
+<ion-content [fullscreen]="true" [scrollEvents]="true" (ionScroll)="verifyTopBar($event)">
+  <!-- Imagen, tiempo, costo, pedido mínimo -->
+  <div class="cover-container">
+    <ion-img [src]="coverPage.url"></ion-img>
+    <ion-text class="cover-left-text">
+      <h1>La Perrada De Chalo</h1>
+      <h5>30-45 min | $2 envio | $15 mínimo</h5>
+    </ion-text>
+  </div>
+  <ion-toolbar>
+    <ion-buttons slot="primary">
+      <ion-button (click)="clickedSearch()">
+        <ion-icon slot="icon-only" name="search"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-searchbar placeholder="Buscar productos..."></ion-searchbar>
+  </ion-toolbar>
+
+   <!-- List of Text Items -->
+   <ion-list *ngFor="let product of products">
+    <ion-item>
+        <ion-row>
+          <ion-text>
+            <h2>{{ product.name }}</h2>
+            <p class="description-color">
+              {{ product.description }}
+            </p>
+          </ion-text>
+
+          <ion-text color="danger">
+            <h3>$ {{ product.price }}</h3>
+          </ion-text>
+        </ion-row>
+    </ion-item>
+  </ion-list>
+
 </ion-content>
