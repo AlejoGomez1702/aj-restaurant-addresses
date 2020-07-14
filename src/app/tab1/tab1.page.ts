@@ -98,15 +98,28 @@ export class Tab1Page implements OnInit
 
   // ********EVENTS********EVENTS********EVENTS********EVENTS********EVENTS**********//
 
+  /**
+   * Evento al cambiar entre categorias de productos.
+   * @param $event 
+   */
   segmentChanged($event:Event)
   {
     console.log('jajajja');
   }
 
-  verifyTopBar()
+  /**
+   * Indica si se muestra la barra inicial o la barra de categorias de productos.
+   * @param $event 
+   */
+  verifyTopBar($event:Event)
   {
-    let pixeles = window.scrollY;
-    console.log(pixeles);
+    // 300 pixeles se cambia el toolbar principal
+    const pointForChange = 300;
+    const valueScroll = $event.detail.scrollTop;
+
+    // Condición (If ternario)
+    (valueScroll >= pointForChange) ? this.firstHeader = false : this.firstHeader = true;
+
   }
 
 }
