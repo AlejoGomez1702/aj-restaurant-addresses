@@ -14,20 +14,20 @@
 <!-- Cabecera con el listado de categorias de productos disponibles -->
 <ion-header [translucent]="true" color="light" *ngIf="!firstHeader">
   <ion-toolbar color="dark">    
-    <ion-segment scrollable (ionChange)="segmentChanged($event)" value="{{ categoriesMenu[0] }}">
+    <ion-segment scrollable (ionChange)="segmentChanged($event)" [value]="category">
       <!-- Menu -->
-      <ng-container *ngFor="let category of categoriesMenu">
-        <ion-segment-button value="{{ category }}">
-          <ion-label>{{ category }}</ion-label>
+      <ng-container *ngFor="let product of products">
+        <ion-segment-button value="{{ product.category }}">
+          <ion-label>{{ product.category }}</ion-label>
         </ion-segment-button>
       </ng-container>
 
       <!-- Bebidas -->
-      <ng-container *ngFor="let category of categoriesDrinks">
+      <!-- <ng-container *ngFor="let category of categoriesDrinks">
         <ion-segment-button value="{{ category }}">
           {{ category }}
         </ion-segment-button>
-      </ng-container>
+      </ng-container> -->
     </ion-segment>
   </ion-toolbar>
 </ion-header> 
@@ -52,21 +52,36 @@
   </ion-toolbar>
 
    <!-- List of Text Items -->
-   <ion-list *ngFor="let product of products">
-    <ion-item>
-        <ion-row>
-          <ion-text>
-            <h2>{{ product.name }}</h2>
-            <p class="description-color">
-              {{ product.description }}
-            </p>
-          </ion-text>
+   <div *ngFor="let product of products" class="mt-products">
+     <!-- Lista de cada categoria -->
+     <ion-list id="{{ product.category }}">
+      <ion-item>
+        <ion-text color="info">
+          <h3> {{ product.category }} </h3>
+        </ion-text>
+      </ion-item>
 
-          <ion-text color="danger">
-            <h3>$ {{ product.price }}</h3>
-          </ion-text>
-        </ion-row>
-    </ion-item>
-  </ion-list>
+      <ion-item *ngFor="let productInfo of product.products">
+        <ion-grid>
+          <!-- Nombre y descripción del producto -->
+          <ion-row>
+            <ion-text>
+              <h2>{{ productInfo.name }}</h2>
+              <p class="description-color">
+                {{ productInfo.description }}
+              </p>
+            </ion-text>
+          </ion-row>
+
+          <!-- Precio del producto -->
+          <ion-row>
+            <ion-text color="danger">
+              <h3>$ {{ productInfo.price }} </h3>
+            </ion-text>
+          </ion-row> 
+        </ion-grid>       
+      </ion-item>
+     </ion-list>
+    </div>
 
 </ion-content>

@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-// import * as firebase from 'firebase';
-// import { environment } from '../../environments/environment';
-import { Product } from '../interfaces/Product'; 
-import { Image } from '../interfaces/Image';
+import { ProductsList } from '../interfaces/ProductsList';
 import { Router } from '@angular/router';
-import { StorageFirebaseService } from '../services/storage-firebase.service';
+import { FirebaseService } from '../services/firebase.service';
+
+import { Inject }  from '@angular/core';
+import { DOCUMENT } from '@angular/common'; 
 
 @Component({
   selector: 'app-tab1',
@@ -14,19 +14,18 @@ import { StorageFirebaseService } from '../services/storage-firebase.service';
 export class Tab1Page implements OnInit
 {
   public firstHeader: boolean;
-  // public storageUrl: String;
-  // public coverPage: Image;
   public coverPageURL: String;
-  public products: Product[] = [];
+  // Productos ofertados en el negocio.
+  public products: ProductsList[] = [];
 
-  // Categorias del "MENU"
-  public categoriesMenu: string[] = [];
-  // Categorias de "BEBIDAS"
-  public categoriesDrinks: string[] = [];  
+  // Valor del toolbar de productos (va cambiando a medida que cambia la categoria).
+  public category: string = 'ANTOJITOS';
 
-  constructor(
+  constructor
+  (
     private router: Router,
-    private storageFirebase: StorageFirebaseService
+    @Inject(DOCUMENT) document,
+    private firebaseService: FirebaseService
   ) 
   {
     this.firstHeader = true;    
@@ -42,20 +41,8 @@ export class Tab1Page implements OnInit
    */
   initInformation()
   {
-    this.categoriesMenu = this.storageFirebase.categoriesMenu;
-    this.categoriesDrinks = this.storageFirebase.categoriesDrinks;
-    // console.log('en el componente lo estoy buscando');
-    this.coverPageURL = this.storageFirebase.coverPageURL;
-    // console.log('Se esta llamandoo el componente');
-    // console.log(this.storageFirebase.coverPageURL);
-    // console.log(this.coverPage);
-    this.products = this.storageFirebase.products;
-    // this.coverPage = {
-    //   full: '',
-    //   name: '',
-    //   url: ''
-    // };
-
+    this.coverPageURL = this.firebaseService.coverPageURL;
+    this.products = this.firebaseService.products;    
   }
 
   /**
@@ -88,8 +75,65 @@ export class Tab1Page implements OnInit
     const pointForChange = 300;
     const valueScroll = (<CustomEvent>$event).detail.scrollTop;
 
+    this.changeSection(valueScroll);
+
     // Condición (If ternario)
     (valueScroll >= pointForChange) ? this.firstHeader = false : this.firstHeader = true;
   }
+
+  /**
+   * Mueve el toolbar dependiendo en que sección de categorias este parado el cliente.
+   */
+  changeSection(valueScroll: number)
+  {
+    for (let i = 0; i < this.products.length; i++) 
+    {
+      let section = this.products[i];
+
+      let category = section.category;
+      let topPx = document.getElementById(category).offsetTop;   
+      
+      // console.log('SCROLL====> El valor del scroll => ' + valueScroll);
+      // console.log('TOPTOP====> El valor de topPx => ' + topPx);
+      // console.log('La longitud de pr');
+
+      if(valueScroll >= topPx)
+      {
+        this.category = this.products[i].category;
+        //console.log('los pixeles que me saca son: ' + category + "  " + topPx);
+        // return;
+      }    
+      // else
+      // {
+      //   // this.category = this.products[i+1].category;
+      //   //console.log('ahora me saca es: ' + category + " " + topPx);
+      // }
+    }
+
+
+
+    // for (let section of this.products) 
+    // {
+    //   let category = section.category;
+    //   let topPx = document.getElementById(category).offsetTop;   
+      
+    //   console.log('El valor del scroll => ' + valueScroll);
+    //   console.log('El valor de topPx => ' + topPx);
+
+    //   if(valueScroll >= topPx)
+    //   {
+    //     this.category = category;
+    //     console.log('los pixeles que me saca son: ' + category + "  " + topPx);
+    //     // return;
+    //   }    
+    //   else
+    //   {
+    //     console.log('ahora me saca es: ' + category + " " + topPx);
+    //   }
+
+    //   break;
+    // }
+  }
+
 
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { StorageFirebaseService } from '../../services/storage-firebase.service'; 
+import { FirebaseService } from '../../services/firebase.service'; 
 import { Image } from '../../interfaces/Image';
 
 @Component({
@@ -15,7 +15,7 @@ export class InformationComponent implements OnInit
 
   constructor(
     private router: Router,
-    private storageFirebase: StorageFirebaseService
+    private storageFirebase: FirebaseService
   ) 
   {
     this.paymentsImages = this.storageFirebase.paymentsImages;
