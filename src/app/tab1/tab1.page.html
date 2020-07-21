@@ -3,7 +3,7 @@
   <!-- Nombre del restaurante y boton de información -->
   <ion-toolbar color="dark">
     <ion-buttons slot="primary">
-      <ion-button color="secondary">
+      <ion-button color="secondary" (click)="startInformationPage()">
         <ion-icon name="alert-circle-outline" slot="icon-only"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -36,7 +36,7 @@
 <ion-content [fullscreen]="true" [scrollEvents]="true" (ionScroll)="verifyTopBar($event)">
   <!-- Imagen, tiempo, costo, pedido mínimo -->
   <div class="cover-container">
-    <ion-img [src]="coverPage.url"></ion-img>
+    <ion-img [src]="coverPageURL"></ion-img>
     <ion-text class="cover-left-text">
       <h1>La Perrada De Chalo</h1>
       <h5>30-45 min | $2 envio | $15 mínimo</h5>

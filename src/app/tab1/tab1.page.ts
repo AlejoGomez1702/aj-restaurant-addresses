@@ -1,7 +1,10 @@
-import { Component, OnInit, HostListener } from '@angular/core';
-import * as firebase from 'firebase';
-import { environment } from '../../environments/environment';
+import { Component, OnInit } from '@angular/core';
+// import * as firebase from 'firebase';
+// import { environment } from '../../environments/environment';
 import { Product } from '../interfaces/Product'; 
+import { Image } from '../interfaces/Image';
+import { Router } from '@angular/router';
+import { StorageFirebaseService } from '../services/storage-firebase.service';
 
 @Component({
   selector: 'app-tab1',
@@ -11,8 +14,9 @@ import { Product } from '../interfaces/Product';
 export class Tab1Page implements OnInit
 {
   public firstHeader: boolean;
-  public storageUrl: String;
-  public coverPage = {};
+  // public storageUrl: String;
+  // public coverPage: Image;
+  public coverPageURL: String;
   public products: Product[] = [];
 
   // Categorias del "MENU"
@@ -20,80 +24,47 @@ export class Tab1Page implements OnInit
   // Categorias de "BEBIDAS"
   public categoriesDrinks: string[] = [];  
 
-  constructor() 
+  constructor(
+    private router: Router,
+    private storageFirebase: StorageFirebaseService
+  ) 
   {
-    this.firstHeader = true;
-    firebase.initializeApp(environment.firebaseConfig);
-    this.storageUrl = environment.storageUrl;    
-
-    this.loadAllCategories();
+    this.firstHeader = true;    
   }
 
   ngOnInit()
   {
-    this.loadCoverFile();
-    this.loadAllProducts();
-    // this.loadAllCategories();
+    this.initInformation();
   }
 
   /**
-   * Obtiene el listado de todas las categorias de productos.
+   * Inicializar toda la información necesaria.
    */
-  loadAllCategories()
+  initInformation()
   {
-    this.categoriesMenu = [];
-    this.categoriesDrinks = [];
-
-    const db = firebase.firestore();
-    db.collection('categories').get().then((categories) => {
-        categories.forEach((category) => {
-          // console.log(category.data().name);
-          this.categoriesMenu.push(category.data().name);
-        });
-    });
-
-    db.collection('categories_2').get().then((categories) => {
-      categories.forEach((category) => {
-        this.categoriesDrinks.push(category.data().name);
-      });
-    });
+    this.categoriesMenu = this.storageFirebase.categoriesMenu;
+    this.categoriesDrinks = this.storageFirebase.categoriesDrinks;
+    // console.log('en el componente lo estoy buscando');
+    this.coverPageURL = this.storageFirebase.coverPageURL;
+    // console.log('Se esta llamandoo el componente');
+    // console.log(this.storageFirebase.coverPageURL);
+    // console.log(this.coverPage);
+    this.products = this.storageFirebase.products;
+    // this.coverPage = {
+    //   full: '',
+    //   name: '',
+    //   url: ''
+    // };
 
   }
 
   /**
-   * Obtiene todos los productos almacenados en la base de datos.
+   * Se acciona cuando queremos ir a la página de información del restaurante
+   * @param $event 
    */
-  loadAllProducts()
+  startInformationPage()
   {
-    // Obteniendo el listado de hamburguesas
-    const db = firebase.firestore();
-    db.collection('hamburguers').get().then((hamburguers) => {
-        hamburguers.forEach((hamburguer) => {
-          this.products.push(<Product>hamburguer.data());
-          // console.log(hamburguer.data());
-        });
-    });
-  }
-
-  /**
-   * Obtiene la imagen de portada principal del restaurante. 
-   */
-  loadCoverFile() 
-  {
-    this.coverPage = {};
- 
-    const storageRef = firebase.storage().ref('cover-page');
-
-    storageRef.listAll().then(result => {
-      result.items.forEach(async ref => {
-        this.coverPage = {
-          name: ref.name,
-          full: ref.fullPath,
-          url: await ref.getDownloadURL(),
-          ref: ref
-        }
-      });
-    });
+    this.router.navigate(['/tabs/tab1/information'])
   }
 
   // ********EVENTS********EVENTS********EVENTS********EVENTS********EVENTS**********//
@@ -115,11 +86,10 @@ export class Tab1Page implements OnInit
   {
     // 300 pixeles se cambia el toolbar principal
     const pointForChange = 300;
-    const valueScroll = $event.detail.scrollTop;
+    const valueScroll = (<CustomEvent>$event).detail.scrollTop;
 
     // Condición (If ternario)
     (valueScroll >= pointForChange) ? this.firstHeader = false : this.firstHeader = true;
-
   }
 
 }
