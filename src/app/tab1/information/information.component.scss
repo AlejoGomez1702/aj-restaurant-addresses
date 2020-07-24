@@ -21,16 +21,15 @@
     font-size: x-large;
 }
 
+.txt-large
+{
+    font-size: large;
+}
+
 ion-grid 
 {
     height: 100%;      
     font-size: large;
-
-    ion-row 
-    {
-    //   height: 80%;
-        // margin-top: 5%;
-    }
 }
 
 ion-img
@@ -42,4 +41,9 @@ ion-img
 .marg-top
 {
     margin-top: 10%;
+}
+
+.txt-center
+{
+    text-align: center;
 }
