@@ -61,7 +61,7 @@
         </ion-text>
       </ion-item>
 
-      <ion-item *ngFor="let productInfo of product.products">
+      <ion-item *ngFor="let productInfo of product.products" (click)="addToCart(productInfo)">
         <ion-grid>
           <!-- Nombre y descripción del producto -->
           <ion-row>

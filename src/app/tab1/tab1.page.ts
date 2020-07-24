@@ -5,6 +5,7 @@ import { FirebaseService } from '../services/firebase.service';
 
 import { Inject }  from '@angular/core';
 import { DOCUMENT } from '@angular/common'; 
+import { Product } from '../interfaces/Product';
 
 @Component({
   selector: 'app-tab1',
@@ -43,6 +44,15 @@ export class Tab1Page implements OnInit
   {
     this.coverPageURL = this.firebaseService.coverPageURL;
     this.products = this.firebaseService.products;    
+  }
+
+  /**
+   * Prepara la vista para agregar un producto al carrito.
+   * @param productInfo 
+   */
+  addToCart(productInfo: Product)
+  {
+    console.log(productInfo);
   }
 
   /**
