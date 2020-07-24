@@ -76,6 +76,29 @@
         
       </ion-list>
     </ng-container>
+
+    <!-- Productos con sabores -->
+    <ng-container *ngIf="product.flavors">
+      <ion-list>
+        <ion-list-header>
+          <h2>
+            Select An Option
+          </h2>
+        </ion-list-header>
+      
+        <ion-item>
+          <ion-label>Flavor</ion-label>
+          <ion-select placeholder="Select One">
+            <ng-container *ngFor="let flavor of product.flavors">
+              <ion-select-option value="{{ flavor.name }}">{{ flavor.name }}</ion-select-option>
+            </ng-container>
+          </ion-select>
+        </ion-item>
+        
+      </ion-list>
+    </ng-container>
+
+
   </div>
 
   <div class="small-margin">
@@ -115,7 +138,7 @@
           </ion-button>
         </ion-col>
         <ion-col>
-          <ion-button disabled="true" color="danger" expand="block">Add      $44.23</ion-button>
+          <ion-button [disabled]="!isFull" color="danger" expand="block">Add      $ {{ total }}</ion-button>
         </ion-col>
       </ion-row>
     </ion-grid>

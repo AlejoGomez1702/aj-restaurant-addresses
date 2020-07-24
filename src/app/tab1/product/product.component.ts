@@ -11,19 +11,30 @@ import { Product } from 'src/app/interfaces/Product';
 })
 export class ProductComponent implements OnInit 
 {
+  // Tipo de producto
+  // 1 ==> Producto sin opciones ni tamaños ni sabores.
+  public productType: number; 
+
   // Producto que se esta comprando.
   public product: Product;
 
   // Lleva la cuenta de la cantidad de producto.
   public productQuantity: number;
 
+  // Indica si se puede o no agregar al carrito (todas las opciones seleccionadas).
+  public isFull: boolean;
+
+  // Valor de agregar el producto al carrito
+  public total: number;
+
   constructor(
     private router: Router,
     private shoppingCartService: ShoppingCartService
   ) 
   { 
-    this.productQuantity = 1;
     this.product = this.shoppingCartService.tempProduct;
+    this.productType = this.getProductType();
+    this.productQuantity = 1;
   }
 
   ngOnInit() {}
@@ -36,7 +47,7 @@ export class ProductComponent implements OnInit
   {
     if(plus)
     {
-      this.productQuantity ++;
+      this.productQuantity ++;      
     }
     else
     {
@@ -44,6 +55,37 @@ export class ProductComponent implements OnInit
       {
         this.productQuantity --;
       }
+    }
+
+    this.processProduct(this.productType, true);
+  }
+
+  /**
+   * Indica que tipo de producto se quiere procesar.
+   * 1 ==> Producto sin opciones ni tamaños ni sabores.
+   */
+  getProductType(): number
+  {
+    // 1 Producto sin opciones ni tamaños ni sabores.
+    const type1 = !this.product.options && !this.product.size && !this.product.flavors;
+    if(type1)
+    {
+      this.total = this.product.price;
+      this.isFull = true;
+      return 1;
+    }
+  }
+
+  /**
+   * Lógica cuando un producto no tiene opciones.
+   * @param type 
+   * @param isPlus Sumar o restar
+   */
+  processProduct(type: number, isPlus: boolean)
+  {
+    if(type == 1) //sin opciones, tamaño ni sabor.
+    {
+      this.total = this.product.price * this.productQuantity;
     }
   }
 

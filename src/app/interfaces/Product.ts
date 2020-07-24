@@ -6,5 +6,10 @@ export interface Product
     name: string,
     photo_name?: string,
     price?: number,
-    tax?: number
+    tax?: number,
+
+    // Opciones
+    options?: [],
+    size?: [],
+    flavors?: []
 }
