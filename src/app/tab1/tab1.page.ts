@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ProductsList } from '../interfaces/ProductsList';
 import { Router } from '@angular/router';
 import { FirebaseService } from '../services/firebase.service';
+import { ShoppingCartService } from '../services/shopping-cart.service';
 
 import { Inject }  from '@angular/core';
 import { DOCUMENT } from '@angular/common'; 
@@ -22,11 +23,15 @@ export class Tab1Page implements OnInit
   // Valor del toolbar de productos (va cambiando a medida que cambia la categoria).
   public category: string = 'ANTOJITOS';
 
+  // Para ir filtrando la lista de productos
+  public filterList: string;
+
   constructor
   (
     private router: Router,
     @Inject(DOCUMENT) document,
-    private firebaseService: FirebaseService
+    private firebaseService: FirebaseService,
+    private shoppingCartService: ShoppingCartService
   ) 
   {
     this.firstHeader = true;    
@@ -53,6 +58,9 @@ export class Tab1Page implements OnInit
   addToCart(productInfo: Product)
   {
     console.log(productInfo);
+    this.shoppingCartService.addProductToCart(productInfo);
+
+
   }
 
   /**
@@ -65,6 +73,24 @@ export class Tab1Page implements OnInit
   }
 
   // ********EVENTS********EVENTS********EVENTS********EVENTS********EVENTS**********//
+
+  /**
+   * Filtra los productos por lo que el usuario vaya digitando en la barra de busqueda.
+   * @param $event 
+   */
+  // filterProducts($event:Event)
+  // {
+  //   this.products = this.firebaseService.products; 
+  //   const userType = (<CustomEvent>$event).detail.value;
+
+  //   if(userType && userType.trim() != '')
+  //   {
+  //     this.products = this.products.filter((product) => {
+  //       return (product.products[0].name.toLowerCase());
+  //     });
+  //   }
+  // }
+
 
   /**
    * Evento al cambiar entre categorias de productos.
