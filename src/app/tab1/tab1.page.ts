@@ -26,19 +26,22 @@ export class Tab1Page implements OnInit
   // Para ir filtrando la lista de productos
   public filterList: string;
 
+  // Conteo de productos agregados al carrito
+  // public productCount: number;
+
   constructor
   (
     private router: Router,
     @Inject(DOCUMENT) document,
     private firebaseService: FirebaseService,
-    private shoppingCartService: ShoppingCartService
+    public shoppingCartService: ShoppingCartService
   ) 
   {
-    this.firstHeader = true;    
+    this.firstHeader = true;  
   }
 
   ngOnInit()
-  {
+  {    
     this.initInformation();
   }
 
@@ -48,7 +51,10 @@ export class Tab1Page implements OnInit
   initInformation()
   {
     this.coverPageURL = this.firebaseService.coverPageURL;
-    this.products = this.firebaseService.products;    
+    this.products = this.firebaseService.products;  
+    // this.productCount = this.shoppingCartService.sizeOfCart();  
+
+    // console.log('product count ' + this.productCount);
   }
 
   /**
@@ -73,24 +79,6 @@ export class Tab1Page implements OnInit
   }
 
   // ********EVENTS********EVENTS********EVENTS********EVENTS********EVENTS**********//
-
-  /**
-   * Filtra los productos por lo que el usuario vaya digitando en la barra de busqueda.
-   * @param $event 
-   */
-  // filterProducts($event:Event)
-  // {
-  //   this.products = this.firebaseService.products; 
-  //   const userType = (<CustomEvent>$event).detail.value;
-
-  //   if(userType && userType.trim() != '')
-  //   {
-  //     this.products = this.products.filter((product) => {
-  //       return (product.products[0].name.toLowerCase());
-  //     });
-  //   }
-  // }
-
 
   /**
    * Evento al cambiar entre categorias de productos.

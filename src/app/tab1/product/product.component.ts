@@ -89,12 +89,18 @@ export class ProductComponent implements OnInit
     }
   }
 
+  addToShoppingCart()
+  {
+    this.shoppingCartService.addProduct(this.product, this.productQuantity);
+    this.goBack();
+  }
+
   /**
    * Redirige atras al listado de productos.
    */
   goBack()
   {
-    this.router.navigate(['/tabs/tab1'])
+    this.router.navigate(['/tabs/tab1']);
   }
 
 }
