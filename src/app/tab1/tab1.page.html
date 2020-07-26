@@ -17,17 +17,10 @@
     <ion-segment scrollable (ionChange)="segmentChanged($event)" [value]="category">
       <!-- Menu -->
       <ng-container *ngFor="let product of products">
-        <ion-segment-button value="{{ product.category }}">
+        <ion-segment-button value="{{ product.category }}" (click)="scrollToCategory($event, product.category)">
           <ion-label>{{ product.category }}</ion-label>
         </ion-segment-button>
       </ng-container>
-
-      <!-- Bebidas -->
-      <!-- <ng-container *ngFor="let category of categoriesDrinks">
-        <ion-segment-button value="{{ category }}">
-          {{ category }}
-        </ion-segment-button>
-      </ng-container> -->
     </ion-segment>
   </ion-toolbar>
 </ion-header> 

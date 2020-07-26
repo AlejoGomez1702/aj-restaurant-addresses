@@ -106,6 +106,16 @@ export class Tab1Page implements OnInit
   }
 
   /**
+   * Al dar click me mueve hasta la categoria que corresponde.
+   * @param $event 
+   */
+  scrollToCategory($event: Event, category: string)
+  {
+    let scrollTo = document.getElementById(category);
+    scrollTo.scrollIntoView();
+  }
+
+  /**
    * Mueve el toolbar dependiendo en que sección de categorias este parado el cliente.
    */
   changeSection(valueScroll: number)

@@ -1,3 +1,6 @@
+import { Size } from './Size';
+import { Option } from './Option';
+
 export interface Product
 {
     best_seller?: boolean,
@@ -9,7 +12,11 @@ export interface Product
     tax?: number,
 
     // Opciones
-    options?: [],
-    size?: [],
-    flavors?: []
+    options?: Option[],
+    size?: Size[],
+    flavors?: string[]
+
+    // Precios
+    initial_price?: number,
+    end_price?: number
 }
