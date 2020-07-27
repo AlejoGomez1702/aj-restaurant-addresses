@@ -77,8 +77,9 @@
      </ion-list>
     </div>
 
+    <!-- Shopping cart button -->
     <ng-container *ngIf="shoppingCartService.sizeOfCart() > 0">
-      <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+      <ion-fab vertical="bottom" horizontal="end" slot="fixed" (click)="goToShoppingCartUrl()">
         <ion-fab-button>
           <ion-label>{{ shoppingCartService.sizeOfCart() }}</ion-label>
           <ion-icon name="cart-outline"></ion-icon>

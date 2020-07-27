@@ -15,7 +15,6 @@ export class ShoppingCartService
   // Listado de productos en el carrito de compras.
   public cartList: CartList[] = [];
 
-
   constructor(
     private router: Router
   ) 
@@ -29,6 +28,7 @@ export class ShoppingCartService
   addProduct(product: Product, quantity: number, options: OptionProduct, type: number)
   {
     const productToAdd = {
+      type: type,
       quantity: quantity,
       product: product,
       options: options
@@ -41,6 +41,9 @@ export class ShoppingCartService
       this.cartList.push(productToAdd);
     }
 
+    this.getTotalOfItems();
+
+    console.log('Carrito de compras');
     console.log(this.cartList);
   }
 
@@ -138,6 +141,69 @@ export class ShoppingCartService
     }
 
     return false;
+  }
+
+  /**
+   * Obtiene el valor total de un item en el carrito de compras.
+   */
+  getTotalOfItems()
+  {
+    for (let i = 0; i < this.cartList.length; i++) 
+    {
+      const item = this.cartList[i];
+      let tax = 0;
+      let priceTotal = 0;
+
+      // Tipo de producto
+      //* 1 ==> Producto sin opciones ni tamaños ni sabores.
+      //* 2 ==> Producto con sabores (flavors).
+      //* 3 ==> Producto con tamaño (size).
+      //* 4 ==> Producto con opciones (options).
+      //* 5 ==> Producto con opciones y tamaños.
+      switch (item.type) 
+      {
+        case 1:
+          tax = item.product.tax * item.quantity;
+          priceTotal = item.product.price * item.quantity; 
+          this.cartList[i].total_tax = tax;
+          this.cartList[i].price_total = priceTotal;
+          break;
+
+        case 2:
+          tax = item.product.tax * item.quantity;
+          priceTotal = item.product.price * item.quantity; 
+          this.cartList[i].total_tax = tax;
+          this.cartList[i].price_total = priceTotal;
+          break;
+
+        case 3:
+          tax = item.options.size.tax * item.quantity;
+          priceTotal = item.product.initial_price * item.quantity;
+          this.cartList[i].total_tax = tax;
+          this.cartList[i].price_total = priceTotal;
+          break;
+
+        case 4:          
+          tax = (item.product.initial_price + item.options.option.additional_value) * item.quantity;
+          tax = tax * item.product.tax;
+          priceTotal = (item.product.initial_price + item.options.option.additional_value) * item.quantity;
+          this.cartList[i].total_tax = tax;
+          this.cartList[i].price_total = priceTotal;
+          break;
+
+        case 5:
+          tax = (item.options.size.value + item.options.option.additional_value) * item.quantity;
+          tax = tax * item.product.tax;
+          priceTotal = (item.options.size.value + item.options.option.additional_value) * item.quantity;
+          this.cartList[i].total_tax = tax;
+          this.cartList[i].price_total = priceTotal;
+          break;
+      
+        default:
+          break;
+      }
+      
+    }
   }
 
 

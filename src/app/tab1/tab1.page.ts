@@ -63,10 +63,8 @@ export class Tab1Page implements OnInit
    */
   addToCart(productInfo: Product)
   {
-    console.log(productInfo);
+    // console.log(productInfo);
     this.shoppingCartService.addProductToCart(productInfo);
-
-
   }
 
   /**
@@ -76,6 +74,14 @@ export class Tab1Page implements OnInit
   startInformationPage()
   {
     this.router.navigate(['/tabs/tab1/information'])
+  }
+
+  /**
+   * Cuando se quiere ir a la página del carrito de compras.
+   */
+  goToShoppingCartUrl()
+  {
+    this.router.navigate(['/shopping-cart'])
   }
 
   // ********EVENTS********EVENTS********EVENTS********EVENTS********EVENTS**********//
@@ -113,6 +119,9 @@ export class Tab1Page implements OnInit
   {
     let scrollTo = document.getElementById(category);
     scrollTo.scrollIntoView();
+
+    // let toolbarScrollTo = document.getElementById(this.category + '_ID');
+    // toolbarScrollTo.scrollIntoView();
   }
 
   /**
