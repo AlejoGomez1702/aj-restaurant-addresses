@@ -1,0 +1,59 @@
+<ion-header [translucent]="true" color="dark">
+  <ion-toolbar color="dark">
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Login or Register</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-header>
+    <h2 class="ion-text-center title">Login</h2>
+  </ion-header>
+
+  <form action="" class="marg-content">
+    <ion-item>
+      <ion-label position="floating">Email</ion-label>
+      <ion-input required="true" type="email" name="email"></ion-input>
+    </ion-item>
+  
+    <ion-item>
+      <ion-label position="floating">Password</ion-label>
+      <ion-input required="true" type="password" name="password"></ion-input>
+    </ion-item>
+
+    <ion-button expand="block" color="dark">Login</ion-button>
+  </form>
+
+  <div class="ion-text-center">
+    <ion-label color="primary">¿Did you forget your password?</ion-label>
+  </div>
+
+  <div class="mt-15">
+    <h4 class="ion-text-center">--Login With Social Networks--</h4>
+  </div>
+
+  <div class="marg-btn">
+    <ion-button color="danger" expand="full">
+      <ion-icon slot="start" name="logo-google"></ion-icon>
+      Google
+    </ion-button>
+  </div>
+
+  <div class="marg-btn">
+    <ion-button expand="block">
+      <ion-icon slot="start" name="logo-facebook"></ion-icon>
+      Facebook
+    </ion-button>
+  </div>
+
+  <div>
+    <h4 class="ion-text-center">--OR--</h4>
+  </div>
+
+  <div class="ion-text-center" (click)="goToRegisterUrl()">
+    <ion-label color="primary">Create An Account</ion-label>
+  </div>
+
+</ion-content>

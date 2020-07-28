@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CartList } from '../interfaces/CartList';
 import { ShoppingCartService } from '../services/shopping-cart.service';
-
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-shopping-cart',
@@ -22,7 +22,8 @@ export class ShoppingCartPage implements OnInit
 
   constructor(
     private router: Router,
-    private shoppingCartService: ShoppingCartService
+    private shoppingCartService: ShoppingCartService,
+    public alertController: AlertController
   ) 
   {
     this.cartList = this.shoppingCartService.cartList;
@@ -46,6 +47,47 @@ export class ShoppingCartPage implements OnInit
       this.subtotal += element.price_total;
       this.taxTotal += element.total_tax;      
     }
+  }
+
+  /**
+   * Dialogo para eliminar un producto del carrito de compras.
+   */
+  async presentAlertConfirm(item: CartList, index: number) 
+  {
+    // console.log('El producto a eliminar es: ');
+    // console.log(this.cartList[index]);
+    const alert = await this.alertController.create({
+      cssClass: 'my-custom-class',
+      header: 'Are you sure to remove the product!',
+      message: item.product.name + ' !!!',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            console.log('Confirm Cancel: blah');
+          }
+        }, {
+          text: 'Delete',
+          cssClass: 'danger',
+          handler: () => {
+            this.cartList.splice(index, 1);
+            this.calculatePrices();
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
+  /**
+   * Redirige a la vista de autenticación de usuarios.
+   */
+  goToAuthUser()
+  {
+    this.router.navigate(['/auth']);
   }
 
   /**

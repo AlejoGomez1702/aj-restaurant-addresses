@@ -1,0 +1,36 @@
+<ion-header [translucent]="true" color="dark">
+  <ion-toolbar color="dark">
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Create Account</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="marg-content">
+    <ion-item>
+      <ion-label position="floating">Names</ion-label>
+      <ion-input required="true" type="text" name="names"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Surnames</ion-label>
+      <ion-input required="true" type="text" name="surnames"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Email</ion-label>
+      <ion-input required="true" type="email" name="email"></ion-input>
+    </ion-item>
+  
+    <ion-item>
+      <ion-label position="floating">Password</ion-label>
+      <ion-input required="true" type="password" name="password" placeholder="minimum 8 characters" minlength="8"></ion-input>
+    </ion-item>
+  </div>
+</ion-content>
+
+<ion-footer>
+  <ion-button expand="block" color="dark">Create Account</ion-button>
+</ion-footer>

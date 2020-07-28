@@ -14,19 +14,13 @@
   </ion-header>
 
   <ion-list>
-    <ion-item *ngFor="let item of cartList">
+    <ion-item *ngFor="let item of cartList; let i = index" (click)="presentAlertConfirm(item, i)">
       <ion-grid>
         <ion-row>
           <ion-col size="2">{{ item.quantity }}X</ion-col>
           <ion-col>{{ item.product.name }}</ion-col>
           <ion-col size="3">
-            <div>
-              ${{ item.price_total | number : '1.2-2' }}
-              <ion-select>
-                <ion-select-option value="delete">Delete</ion-select-option>
-                <ion-select-option value="m">Male</ion-select-option>
-              </ion-select>
-            </div>
+            ${{ item.price_total | number : '1.2-2' }}
           </ion-col>
         </ion-row>
       </ion-grid>
@@ -80,7 +74,7 @@
 
 <!-- Footer -->
 <ion-footer>
-  <ion-button expand="block" color="danger">
+  <ion-button expand="block" color="danger" (click)="goToAuthUser()">
     Continue
   </ion-button>
 </ion-footer>
