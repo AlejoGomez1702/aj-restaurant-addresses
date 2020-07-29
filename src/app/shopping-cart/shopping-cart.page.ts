@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { CartList } from '../interfaces/CartList';
 import { ShoppingCartService } from '../services/shopping-cart.service';
 import { AlertController } from '@ionic/angular';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-shopping-cart',
@@ -23,7 +24,8 @@ export class ShoppingCartPage implements OnInit
   constructor(
     private router: Router,
     private shoppingCartService: ShoppingCartService,
-    public alertController: AlertController
+    public alertController: AlertController,
+    private authService: AuthService
   ) 
   {
     this.cartList = this.shoppingCartService.cartList;
@@ -87,7 +89,10 @@ export class ShoppingCartPage implements OnInit
    */
   goToAuthUser()
   {
-    this.router.navigate(['/auth']);
+    let url = '';
+    // Si o NO autenticado
+    this.authService.isLogin ? url = '/shopping-cart/payment' : url = '/auth';        
+    this.router.navigate([url]);
   }
 
   /**

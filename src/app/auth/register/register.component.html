@@ -8,29 +8,37 @@
 </ion-header>
 
 <ion-content>
-  <div class="marg-content">
+  <form class="marg-content" [formGroup]="registerForm" (ngSubmit)="registerUser()"> 
     <ion-item>
       <ion-label position="floating">Names</ion-label>
-      <ion-input required="true" type="text" name="names"></ion-input>
+      <ion-input required="true" type="text" formControlName="names" autocapitalize="on"></ion-input>
     </ion-item>
 
     <ion-item>
       <ion-label position="floating">Surnames</ion-label>
-      <ion-input required="true" type="text" name="surnames"></ion-input>
+      <ion-input required="true" type="text" formControlName="surnames" autocapitalize="on"></ion-input>
     </ion-item>
 
     <ion-item>
       <ion-label position="floating">Email</ion-label>
-      <ion-input required="true" type="email" name="email"></ion-input>
+      <ion-input required="true" type="email" formControlName="email"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Phone</ion-label>
+      <ion-input required="true" type="number" minlength="8" formControlName="phone">      
+      </ion-input>
     </ion-item>
   
     <ion-item>
       <ion-label position="floating">Password</ion-label>
-      <ion-input required="true" type="password" name="password" placeholder="minimum 8 characters" minlength="8"></ion-input>
+      <ion-input required="true" type="password" placeholder="minimum 8 characters" minlength="8" formControlName="password">      
+      </ion-input>
     </ion-item>
-  </div>
-</ion-content>
 
-<ion-footer>
-  <ion-button expand="block" color="dark">Create Account</ion-button>
-</ion-footer>
+    <ion-footer class="mt-30">
+      <ion-button expand="block" color="dark" type="submit" [disabled]="!registerForm.valid">Create Account</ion-button>
+    </ion-footer>
+
+  </form>
+</ion-content>

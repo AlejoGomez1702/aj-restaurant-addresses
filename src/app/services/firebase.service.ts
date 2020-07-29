@@ -3,6 +3,7 @@ import * as firebase from 'firebase';
 import { Product } from '../interfaces/Product'; 
 import { ProductsList } from '../interfaces/ProductsList';
 import { environment } from '../../environments/environment';
+import { RegisterForm } from '../interfaces/RegisterForm';
 
 @Injectable({
   providedIn: 'root'
@@ -89,29 +90,6 @@ export class FirebaseService
   }
 
   /**
-   * Obtiene el listado de todas las categorias de productos.
-   */
-  // loadAllCategories()
-  // {
-  //   this.categoriesMenu = [];
-  //   this.categoriesDrinks = [];
-
-  //   const db = firebase.firestore();
-  //   db.collection('categories').get().then((categories) => {
-  //       categories.forEach((category) => {
-  //         // console.log(category.data().name);
-  //         this.categoriesMenu.push(category.data().name);
-  //       });
-  //   });
-
-  //   db.collection('categories_2').get().then((categories) => {
-  //     categories.forEach((category) => {
-  //       this.categoriesDrinks.push(category.data().name);
-  //     });
-  //   });
-  // }
-
-  /**
    * Obtiene la imagen de portada principal del restaurante. 
    */
   loadCoverFile()
@@ -149,33 +127,23 @@ export class FirebaseService
   }
 
   /**
-   * Obtiene todos los productos almacenados en la base de datos.
+   * 
+   * @param user 
    */
-  // loadAllProducts()
-  // {
-  //   const db = firebase.firestore();
-  //   // Obteniendo el listado de "Antojitos (whims)".
-  //   db.collection('whims').get().then((whims) => {
-  //     let category = 'Antojitos'; // Si se modifica el restaurante o sección (modificar).
-  //     let sectionToAdd = [];
+  createUser(user: RegisterForm, credentials)
+  {
+    const db = firebase.firestore();
+    db.collection('users').doc(credentials.user.uid).set({
+      names: user.names,
+      surnames: user.surnames,
+      email: user.email,
+      phone: user.phone
+    }).then(() => {
+      console.log('Se creo en la base de datos el usuario');
+      // console.log(user);
+    }).catch((error) => {
+      console.log('NOOOO SE PUDO CREAR EN LA BASE DE DATOS');
+    });
+  }
 
-  //     whims.forEach((whim) => {
-  //       const productToAdd = {
-  //         product: <Product>whim.data()
-  //       };
-  //       sectionToAdd.push(productToAdd);
-  //     });
-
-  //     this.products2.push({category: category, products: sectionToAdd});
-  //   });
-
-  //   // Obteniendo el listado de hamburguesas
-    
-  //   // db.collection('hamburguers').get().then((hamburguers) => {
-  //   //     hamburguers.forEach((hamburguer) => {
-  //   //       this.products.push(<Product>hamburguer.data());
-  //   //       // console.log(hamburguer.data());
-  //   //     });
-  //   // });
-  // }
 }
