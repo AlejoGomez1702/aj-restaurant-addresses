@@ -14,6 +14,8 @@ export class RegisterComponent implements OnInit
   public registerForm = new FormGroup({
     names: new FormControl(''),
     surnames: new FormControl(''),
+    street: new FormControl(''),
+    street_optional: new FormControl(''),
     email: new FormControl(''),
     phone: new FormControl(''),
     password: new FormControl('')
@@ -34,8 +36,9 @@ export class RegisterComponent implements OnInit
    */
   registerUser()
   {
-    const user = this.registerForm.value;
-    this.authService.register(user);
+    const form = this.registerForm.value;
+
+    this.authService.register(form);
 
     // console.log(this.registerForm.value);
   }

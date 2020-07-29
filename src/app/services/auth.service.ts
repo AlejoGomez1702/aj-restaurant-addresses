@@ -55,7 +55,19 @@ export class AuthService
    */
   loginWithGoogle()
   {
-    return this.authLogin(new auth.GoogleAuthProvider);
+    return this.afAuth.signInWithPopup(new auth.GoogleAuthProvider)
+    .then((result) => {
+      if(result.additionalUserInfo.isNewUser)
+      {
+        this.fbService.createGoogleUser(result);
+      }
+      this.router.navigate(['/shopping-cart']);      
+    }).catch((error) => {
+        console.log(error)
+    });
+    // return this.authLogin(new auth.GoogleAuthProvider);
+
+    // return this.authLogin(new auth.GoogleAuthProvider);
   }
 
   /**
@@ -63,20 +75,30 @@ export class AuthService
    */
   loginWithFacebook()
   {
-    return this.authLogin(new auth.FacebookAuthProvider);
+    return this.afAuth.signInWithPopup(new auth.FacebookAuthProvider)
+    .then((result) => {
+      if(result.additionalUserInfo.isNewUser)
+      {
+        this.fbService.createFacebookUser(result);
+      }
+      this.router.navigate(['/shopping-cart']);      
+    }).catch((error) => {
+        console.log(error)
+    });
+    // return this.authLogin(new auth.FacebookAuthProvider);
   }
 
   // Auth logic to run auth providers
-  authLogin(provider) {
-    return this.afAuth.signInWithPopup(provider)
-    .then((result) => {
-      this.router.navigate(['/shopping-cart']);
-        console.log('You have been successfully logged in!');
-        console.log(result);
-    }).catch((error) => {
-        console.log(error)
-    })
-  }
+  // authLogin(provider) {
+  //   return this.afAuth.signInWithPopup(provider)
+  //   .then((result) => {
+  //     this.router.navigate(['/shopping-cart']);
+  //       console.log('You have been successfully logged in!');
+  //       console.log(result);
+  //   }).catch((error) => {
+  //       console.log(error)
+  //   })
+  // }
 
   /**
    * Registra un usuario en firebase. 
@@ -90,13 +112,6 @@ export class AuthService
       this.fbService.createUser(user, credentials);
       return true;
     });
-
-    // try 
-    // {
-    //   const result = await this.afAuth.createUserWithEmailAndPassword(user.email, user.password);
-    //   return result;
-    // } 
-    // this.getState();
   }
 
   /**

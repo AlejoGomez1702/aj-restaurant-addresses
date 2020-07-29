@@ -4,6 +4,7 @@ import { CartList } from '../interfaces/CartList';
 import { ShoppingCartService } from '../services/shopping-cart.service';
 import { AlertController } from '@ionic/angular';
 import { AuthService } from '../services/auth.service';
+import { FirebaseService } from '../services/firebase.service';
 
 @Component({
   selector: 'app-shopping-cart',
@@ -25,11 +26,13 @@ export class ShoppingCartPage implements OnInit
     private router: Router,
     private shoppingCartService: ShoppingCartService,
     public alertController: AlertController,
-    private authService: AuthService
+    private authService: AuthService,
+    private firebaseService: FirebaseService
   ) 
   {
     this.cartList = this.shoppingCartService.cartList;
     this.calculatePrices();
+    this.goToAuthUser(true);
   }
 
   ngOnInit() {
@@ -87,12 +90,37 @@ export class ShoppingCartPage implements OnInit
   /**
    * Redirige a la vista de autenticación de usuarios.
    */
-  goToAuthUser()
+  async goToAuthUser(first: boolean)
   {
     let url = '';
-    // Si o NO autenticado
-    this.authService.isLogin ? url = '/shopping-cart/payment' : url = '/auth';        
-    this.router.navigate([url]);
+
+    if(this.authService.isLogin)
+    {
+      await this.authService.getCurrentUser()
+      .then((user) => {
+        console.log('Usuario Logueadoooo...')
+        this.firebaseService.getUserByUid(user.uid);
+      });
+
+      const userLogin = this.firebaseService.user;
+      if(!userLogin.email || !userLogin.phone || userLogin.addresses.length == 0)
+      {
+        url = '/auth/complete-data';
+      }      
+      else
+      {
+        url = '/shopping-cart/payment';
+      }
+    }
+    else
+    {
+      url = '/auth';
+    }
+
+    if(!first)
+    {
+      this.router.navigate([url]);
+    }
   }
 
   /**

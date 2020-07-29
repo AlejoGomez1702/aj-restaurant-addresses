@@ -1,9 +1,13 @@
 import { Injectable } from '@angular/core';
 import * as firebase from 'firebase';
 import { Product } from '../interfaces/Product'; 
+import { UserAuth } from '../interfaces/UserAuth';
 import { ProductsList } from '../interfaces/ProductsList';
 import { environment } from '../../environments/environment';
 import { RegisterForm } from '../interfaces/RegisterForm';
+import { Router } from '@angular/router';
+import { AuthService } from './auth.service';
+
 
 @Injectable({
   providedIn: 'root'
@@ -33,18 +37,21 @@ export class FirebaseService
   // Productos que se ofrecen en el restaurante.
   public products: ProductsList[] = [];
 
+  // Usuario autenticado actualmente.
+  public user: UserAuth;
+
   // ***************************************************
   // Categorias del "MENU"
-  public categoriesMenu: string[] = [];
-  // Categorias de "BEBIDAS"
-  public categoriesDrinks: string[] = [];  
-
-  // Productos que ofrece el restaurante
-  //public products: Product[] = [];
+  // public categoriesMenu: string[] = [];
+  // // Categorias de "BEBIDAS"
+  // public categoriesDrinks: string[] = [];  
 
   // ***************************************************
 
-  constructor() 
+  constructor(
+    // private authService: AuthService,
+    private router: Router
+  ) 
   {
     firebase.initializeApp(environment.firebaseConfig);
     this.initInformation();
@@ -52,11 +59,13 @@ export class FirebaseService
 
   initInformation()
   {
-    // this.loadAllCategories();
     this.loadCoverFile();
-    // this.loadAllProducts();
-    // this.loadPaymentImages();
     this.initAllProducts();
+
+    // this.authService.getCurrentUser()
+    // .then((user) => {
+    //   this.getUserByUid(user.uid);
+    // });
   }
 
   /**
@@ -127,22 +136,103 @@ export class FirebaseService
   }
 
   /**
-   * 
-   * @param user 
+   * Crea un documento usuario en la base de datos de firebase.
+   * El usuario carecerá de => addresses([]) ---> phone ('').
+   * @param form 
    */
-  createUser(user: RegisterForm, credentials)
+  createGoogleUser(form)
+  {
+    // console.log('Goooooglllleeeee'); 
+    // console.log(form);
+    // return;
+    const db = firebase.firestore();
+    db.collection('users').doc(form.user.uid).set({
+      names: form.additionalUserInfo.profile.given_name,
+      surnames: form.additionalUserInfo.profile.family_name,
+      addresses: [],
+      email: form.additionalUserInfo.profile.email,
+      phone: form.user.phoneNumber
+    }).then(() => {
+      this.router.navigate(['/shopping-cart']);
+      console.log('Se creo en la base de datos el usuario');
+      // console.log(form);
+    }).catch((error) => {
+      this.router.navigate(['/auth']);
+      console.log('NOOOO SE PUDO CREAR EN LA BASE DE DATOS');
+    });
+  }
+
+  /**
+   * Crea un usuario a partir de los datos entregados por facebook.
+   * @param form 
+   */
+  createFacebookUser(form)
   {
     const db = firebase.firestore();
-    db.collection('users').doc(credentials.user.uid).set({
-      names: user.names,
-      surnames: user.surnames,
-      email: user.email,
-      phone: user.phone
+    db.collection('users').doc(form.user.uid).set({
+      names: form.additionalUserInfo.profile.name,
+      surnames: form.additionalUserInfo.profile.last_name,
+      addresses: [],
+      email: form.user.email, 
+      phone: form.user.phoneNumber
     }).then(() => {
+      this.router.navigate(['/shopping-cart']);
       console.log('Se creo en la base de datos el usuario');
-      // console.log(user);
+      // console.log(form);
     }).catch((error) => {
+      this.router.navigate(['/auth']);
       console.log('NOOOO SE PUDO CREAR EN LA BASE DE DATOS');
+    });
+  }
+
+  /**
+   * Crea un usuario respaldo sistema de autenticación de firebase en firestore.
+   * @param form 
+   */
+  createUser(form: RegisterForm, credentials)
+  {
+    // console.log(form);
+    // return;
+    const db = firebase.firestore();
+    db.collection('users').doc(credentials.user.uid).set({
+      names: form.names,
+      surnames: form.surnames,
+      addresses: [
+        {
+          street: form.street,
+          street_optional: form.street_optional
+        }
+      ],
+      email: form.email,
+      phone: form.phone
+    }).then(() => {
+      this.router.navigate(['/shopping-cart']);
+      console.log('Se creo en la base de datos el usuario');
+      // console.log(form);
+    }).catch((error) => {
+      this.router.navigate(['/auth']);
+      console.log('NOOOO SE PUDO CREAR EN LA BASE DE DATOS');
+    });
+  }
+
+  /**
+   * Obtiene el usuario asociado al uid en la base de datos.
+   * @param uid 
+   */
+  async getUserByUid(uid: string)
+  {
+    const db = firebase.firestore();
+    db.collection('users').doc(uid).get()
+    .then((user) => {
+      if (user.exists) {
+        console.log("Document data:", user.data());
+        this.user = <UserAuth>user.data();
+      } else {
+          // doc.data() will be undefined in this case
+          console.log("No such document!");
+      }
+    }).catch((error) => {
+      console.log("Error getting document:", error);
     });
   }
 
