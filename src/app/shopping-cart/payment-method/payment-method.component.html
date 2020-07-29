@@ -1,3 +1,53 @@
+<ion-header [translucent]="true" color="dark">
+  <ion-toolbar color="dark">
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Choose a Payment Method</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-header>
+    <h2 class="ion-text-center title">Where do we take the order?</h2>
+  </ion-header>
+
+  <div class="small-margin">
+    <ion-grid>
+      <ion-row (click)="showInfo()">
+        <h2> Credit Card (Stripe) </h2>
+        <ion-toggle [ngModel]="card"></ion-toggle>
+      </ion-row>
+
+      <ion-row (click)="showInfo()">
+        <h2> Payment When Delivery Is Made </h2>
+        <ion-toggle [(ngModel)]="cash"></ion-toggle>
+      </ion-row>
+
+    </ion-grid>
+  </div>
+
+  <ng-container *ngIf="card && !cash">
+
+  </ng-container>
+
+  <ng-container *ngIf="cash && !card">
+    <ion-grid>
+      <ion-row>
+        Enter the amount with which you will pay.
+      </ion-row>
+      <ion-row>
+        <ion-input type="number" [(ngModel)]="backCash"></ion-input>
+      </ion-row>
+    </ion-grid>
+  </ng-container>
+
+</ion-content>
+
+
+
+
+
 <p (click)="salir()">
   Salir
 </p>

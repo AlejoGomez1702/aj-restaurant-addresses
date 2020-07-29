@@ -88,18 +88,6 @@ export class AuthService
     // return this.authLogin(new auth.FacebookAuthProvider);
   }
 
-  // Auth logic to run auth providers
-  // authLogin(provider) {
-  //   return this.afAuth.signInWithPopup(provider)
-  //   .then((result) => {
-  //     this.router.navigate(['/shopping-cart']);
-  //       console.log('You have been successfully logged in!');
-  //       console.log(result);
-  //   }).catch((error) => {
-  //       console.log(error)
-  //   })
-  // }
-
   /**
    * Registra un usuario en firebase. 
    * @param email 
@@ -150,31 +138,19 @@ export class AuthService
     try 
     {
       await this.afAuth.onAuthStateChanged((user) => {
-        user ? (this.isLogin = true) : (this.isLogin = false) 
+        if(user)
+        {
+          this.fbService.getUserByUid(user.uid);
+          this.isLogin = true
+        }
+        else
+        {
+          this.isLogin = false;
+        }
       });      
     } catch (error) 
     {
       console.log(error);      
     }
   }
-
-
-
-
-  /**
-   * Realiza el login con google.
-   */
-  // async googleSignin()
-  // {
-  //   try
-  //   {
-  //     return this.afAuth.signInWithPopup(new auth.GoogleAuthProvider());
-  //   }
-  //   catch(error)
-  //   {
-  //     console.log(error);
-  //   }
-  // }
-
-
 }

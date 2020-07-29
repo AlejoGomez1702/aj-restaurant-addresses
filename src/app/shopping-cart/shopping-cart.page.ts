@@ -98,19 +98,21 @@ export class ShoppingCartPage implements OnInit
     {
       await this.authService.getCurrentUser()
       .then((user) => {
-        console.log('Usuario Logueadoooo...')
+        // console.log('Usuario Logueadoooo...')
         this.firebaseService.getUserByUid(user.uid);
       });
 
-      const userLogin = this.firebaseService.user;
-      if(!userLogin.email || !userLogin.phone || userLogin.addresses.length == 0)
-      {
-        url = '/auth/complete-data';
-      }      
-      else
-      {
-        url = '/shopping-cart/payment';
-      }
+      this.firebaseService.getLoginUser()
+      .subscribe((user) => {
+        if(!user.email || !user.phone || user.addresses.length == 0)
+        {
+          url = '/auth/complete-data';
+        }      
+        else
+        {
+          url = '/shopping-cart/addresses';
+        }
+      });
     }
     else
     {

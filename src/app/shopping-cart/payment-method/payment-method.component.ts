@@ -9,14 +9,28 @@ import { Router } from '@angular/router';
 })
 export class PaymentMethodComponent implements OnInit 
 {
+  public card: boolean;
+  public cash: boolean;
+
+  public backCash: number;
 
   constructor(
     private authService: AuthService,
     private router: Router
   ) 
-  { }
+  { 
+    this.backCash = 0;
+    this.card = false;
+    this.cash = false;
+  }
 
   ngOnInit() {}
+
+  showInfo()
+  {
+    console.log('Card ' + this.card);
+    console.log('Cash ' + this.cash);
+  }
 
   salir()
   {

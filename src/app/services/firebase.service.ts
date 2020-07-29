@@ -7,6 +7,8 @@ import { environment } from '../../environments/environment';
 import { RegisterForm } from '../interfaces/RegisterForm';
 import { Router } from '@angular/router';
 import { AuthService } from './auth.service';
+import { Street } from '../interfaces/Street';
+import { Observable, of, Subject } from 'rxjs';
 
 
 @Injectable({
@@ -40,13 +42,13 @@ export class FirebaseService
   // Usuario autenticado actualmente.
   public user: UserAuth;
 
-  // ***************************************************
-  // Categorias del "MENU"
-  // public categoriesMenu: string[] = [];
-  // // Categorias de "BEBIDAS"
-  // public categoriesDrinks: string[] = [];  
 
-  // ***************************************************
+  // *******PERMITE REFRESCAR LAS DIRECCIONES NUEVAS EN LA VISTA.*********//
+  // Observable string sources
+  private componentMethodCallSource = new Subject<any>();
+
+  // Observable string streams
+  componentMethodCalled$ = this.componentMethodCallSource.asObservable();
 
   constructor(
     // private authService: AuthService,
@@ -57,15 +59,16 @@ export class FirebaseService
     this.initInformation();
   }
 
+  //********************************
+  // Service message commands
+  callComponentMethod() {
+    this.componentMethodCallSource.next();
+  }
+
   initInformation()
   {
     this.loadCoverFile();
     this.initAllProducts();
-
-    // this.authService.getCurrentUser()
-    // .then((user) => {
-    //   this.getUserByUid(user.uid);
-    // });
   }
 
   /**
@@ -147,6 +150,7 @@ export class FirebaseService
     // return;
     const db = firebase.firestore();
     db.collection('users').doc(form.user.uid).set({
+      uid: form.user.uid,
       names: form.additionalUserInfo.profile.given_name,
       surnames: form.additionalUserInfo.profile.family_name,
       addresses: [],
@@ -170,6 +174,7 @@ export class FirebaseService
   {
     const db = firebase.firestore();
     db.collection('users').doc(form.user.uid).set({
+      uid: form.user.uid,
       names: form.additionalUserInfo.profile.name,
       surnames: form.additionalUserInfo.profile.last_name,
       addresses: [],
@@ -191,10 +196,9 @@ export class FirebaseService
    */
   createUser(form: RegisterForm, credentials)
   {
-    // console.log(form);
-    // return;
     const db = firebase.firestore();
     db.collection('users').doc(credentials.user.uid).set({
+      uid: credentials.user.uid,
       names: form.names,
       surnames: form.surnames,
       addresses: [
@@ -234,6 +238,37 @@ export class FirebaseService
     }).catch((error) => {
       console.log("Error getting document:", error);
     });
+  }
+
+  /**
+   * Añade una nueva dirección al usuario logueado
+   * @param form Información de la dirección.
+   */
+  addAddress(form: Street)
+  {
+    if(this.user)
+    {
+      this.user.addresses.push(form);
+      const db = firebase.firestore();
+      db.collection('users').doc(this.user.uid).set(this.user)
+      .then(() => {
+        this.callComponentMethod();
+        this.router.navigate(['shopping-cart/addresses']); 
+        return true;
+      }).catch((error) => {
+        console.log(error);
+        return false;
+      });
+    }
+    
+  }
+
+  /**
+   * Obtiene el usuario actualmente autenticado en el sistema.
+   */
+  getLoginUser(): Observable<UserAuth>
+  {
+    return of(this.user);
   }
 
 }

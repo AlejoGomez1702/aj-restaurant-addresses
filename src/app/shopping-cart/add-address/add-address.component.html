@@ -1,0 +1,32 @@
+<ion-header [translucent]="true" color="dark">
+  <ion-toolbar color="dark">
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Add Address</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-header>
+    <h2 class="ion-text-center title">Where do we take the order?</h2>
+  </ion-header>
+
+  <form class="marg-content" [formGroup]="addressForm" (ngSubmit)="registerAddress()"> 
+
+    <ion-item>
+      <ion-label position="floating">Street Address</ion-label>
+      <ion-input required="true" type="text" formControlName="street" placeholder="House number and street name"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-input type="text" formControlName="street_optional" placeholder="Appartment, suite, unit, etc. (optional)"></ion-input>
+    </ion-item>
+
+    <ion-footer class="mt-30">
+      <ion-button expand="block" color="dark" type="submit" [disabled]="!addressForm.valid">Add Address</ion-button>
+    </ion-footer>
+
+  </form>
+
+</ion-content>
