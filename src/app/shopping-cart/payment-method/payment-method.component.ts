@@ -3,6 +3,10 @@ import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
 import { FormGroup, FormControl } from '@angular/forms';
 
+// Payments with Stripe.
+import { Stripe } from '@ionic-native/stripe/ngx';
+import { environment } from 'src/environments/environment';
+
 @Component({
   selector: 'app-payment-method',
   templateUrl: './payment-method.component.html',
@@ -12,6 +16,14 @@ export class PaymentMethodComponent implements OnInit
 {
   public card: boolean;
   public cash: boolean;
+
+  // Datos de la tarjeta con la que el cliente va pagar.
+  cardDetails = {
+    number: '4242424242424242',
+    expMonth: 12,
+    expYear: 2020,
+    cvc: '220'
+  }
 
   // public backCash: number;
 
@@ -29,6 +41,7 @@ export class PaymentMethodComponent implements OnInit
 
   constructor(
     private authService: AuthService,
+    private stripe: Stripe,
     private router: Router
   ) 
   { 
@@ -42,9 +55,22 @@ export class PaymentMethodComponent implements OnInit
   /**
    * Pagar el pedido con tarjeta (stripe).
    */
-  payWithCard()
-  {
-    
+  payWithStripe() {
+    this.stripe.setPublishableKey(environment.stripeKey);
+
+    this.cardDetails = {
+      number: '4242424242424242',
+      expMonth: 12,
+      expYear: 2020,
+      cvc: '220'
+    }
+
+    this.stripe.createCardToken(this.cardDetails)
+      .then(token => {
+        console.log(token);
+        // this.makePayment(token.id);
+      })
+      .catch(error => console.error(error));
   }
 
   /**

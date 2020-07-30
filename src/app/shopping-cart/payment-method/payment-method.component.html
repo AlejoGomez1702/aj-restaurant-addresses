@@ -31,7 +31,7 @@
 
   <!-- Opciones para el pago con tarjeta -->
   <ng-container *ngIf="card && !cash">
-    <form [formGroup]="paymentForm" (ngSubmit)="payWithCard()">
+    <form [formGroup]="paymentForm" (ngSubmit)="payWithStripe()">
       <!-- Card number -->
       <ion-item>
         <ion-label position="floating">Card Number</ion-label>

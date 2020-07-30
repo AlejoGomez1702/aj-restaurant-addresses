@@ -11,11 +11,17 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
+// HTTP
+import { HttpClientModule, HttpClient } from '@angular/common/http';
+
 // Firebase
 import {FirebaseUIModule, firebase, firebaseui} from 'firebaseui-angular';
 import {AngularFireModule} from '@angular/fire';
 import {AngularFireAuthModule} from '@angular/fire/auth';
 import { CardNumberPipe } from './pipes/card-number.pipe';
+
+// Stripe (Payments)
+import { Stripe } from '@ionic-native/stripe/ngx';
 
 
 const firebaseUiAuthConfig: firebaseui.auth.Config = {
@@ -54,6 +60,7 @@ const firebaseUiAuthConfig: firebaseui.auth.Config = {
   entryComponents: [],
   imports: [
     BrowserModule, 
+    HttpClientModule,
     IonicModule.forRoot(), 
     // ReactiveFormsModule,
     // FormsModule,
@@ -63,8 +70,10 @@ const firebaseUiAuthConfig: firebaseui.auth.Config = {
     FirebaseUIModule.forRoot(firebaseUiAuthConfig)
   ],
   providers: [
+    HttpClient,
     StatusBar,
     SplashScreen,
+    Stripe,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]
