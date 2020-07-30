@@ -7,6 +7,7 @@ export interface RegisterForm
     street: string,
     street_optional?: string,
     // addresses: Street[],
+    zip: string,
 
     email: string,
     phone: number,

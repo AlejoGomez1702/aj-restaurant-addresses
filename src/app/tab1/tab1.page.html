@@ -7,7 +7,8 @@
         <ion-icon name="alert-circle-outline" slot="icon-only"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title size="small">La Perrada De Chalo</ion-title>
+    <!-- <ion-title size="small">La Perrada De Chalo</ion-title> -->
+    <ion-title size="small">{{ generalInformation.restaurant_name }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -31,8 +32,8 @@
   <div class="cover-container">
     <ion-img [src]="coverPageURL"></ion-img>
     <ion-text class="cover-left-text">
-      <h1>La Perrada De Chalo</h1>
-      <h5>30-45 min | $2 envio | $15 mínimo</h5>
+      <h1>{{ generalInformation.restaurant_name }}</h1>
+      <h5>Pickup {{ generalInformation.pik_time }} min | Domicile {{ generalInformation.domicile_time }} min | With Card ${{ generalInformation.minimum_with_card }}</h5>
     </ion-text>
   </div>
 

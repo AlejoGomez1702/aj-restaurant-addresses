@@ -5,7 +5,6 @@ import { Router } from '@angular/router';
 import { auth } from 'firebase/app';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
-import { Observable, of } from 'rxjs';
 import { switchMap, first } from 'rxjs/operators';
 import { RegisterForm } from '../interfaces/RegisterForm';
 import { LoginForm } from '../interfaces/LoginForm';
@@ -22,6 +21,10 @@ export class AuthService
   // Hay un usuario logueado o no.
   public isLogin: boolean;
 
+  // Cuando se registra una dirección el ZIP(código postal)
+  // debe ser alguno de los que se listan aqui.
+  public supportedZip: string[] = ['11372', '11373'];
+
   constructor(
     private afAuth: AngularFireAuth,
     private afs: AngularFirestore,
@@ -30,6 +33,19 @@ export class AuthService
   ) 
   { 
     this.getState();
+  }
+
+  validateZipCode(zipCode: string): boolean
+  {
+    for (const zip of this.supportedZip) 
+    {
+      if(zipCode == zip)
+      {
+        return true;
+      }        
+    }
+
+    return false;
   }
 
   /**

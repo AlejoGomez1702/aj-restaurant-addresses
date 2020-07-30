@@ -7,6 +7,7 @@ import { ShoppingCartService } from '../services/shopping-cart.service';
 import { Inject }  from '@angular/core';
 import { DOCUMENT } from '@angular/common'; 
 import { Product } from '../interfaces/Product';
+import { GeneralInformation } from '../interfaces/GeneralInformation';
 
 @Component({
   selector: 'app-tab1',
@@ -26,6 +27,9 @@ export class Tab1Page implements OnInit
   // Para ir filtrando la lista de productos
   public filterList: string;
 
+  // Información general sobre el restaurante.
+  public generalInformation: GeneralInformation;
+
   // Conteo de productos agregados al carrito
   // public productCount: number;
 
@@ -38,6 +42,13 @@ export class Tab1Page implements OnInit
   ) 
   {
     this.firstHeader = true;  
+    // this.generalInformation = {
+    //   domicile_time: '',
+    //   minimum_with_card: 0,
+    //   pik_time: '',
+    //   restaurant_name: ''
+    // };
+    this.initInformation();
   }
 
   ngOnInit()
@@ -52,6 +63,7 @@ export class Tab1Page implements OnInit
   {
     this.coverPageURL = this.firebaseService.coverPageURL;
     this.products = this.firebaseService.products;  
+    this.generalInformation = this.firebaseService.generalInformation;
     // this.productCount = this.shoppingCartService.sizeOfCart();  
 
     // console.log('product count ' + this.productCount);

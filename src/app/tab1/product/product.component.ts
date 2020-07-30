@@ -32,6 +32,9 @@ export class ProductComponent implements OnInit
   // Valor de agregar el producto al carrito
   public total: number;
 
+  // Observations.
+  public observations: string;
+
   // Cuando es de escoger sabores este guarda el sabor.
   private options: OptionProduct = {};
 
@@ -39,10 +42,11 @@ export class ProductComponent implements OnInit
     private router: Router,
     private shoppingCartService: ShoppingCartService
   ) 
-  { 
+  {     
     this.product = this.shoppingCartService.tempProduct;
     this.productType = this.getProductType();
     this.productQuantity = 1;
+    this.observations = '';
   }
 
   ngOnInit() 
@@ -53,6 +57,7 @@ export class ProductComponent implements OnInit
    */
   addToShoppingCart()
   {
+    this.options.observations = this.observations;
     this.shoppingCartService.addProduct(this.product, this.productQuantity, this.options, this.productType);
     this.goBack();
   }

@@ -13,19 +13,37 @@
     <h2 class="ion-text-center title">My Order</h2>
   </ion-header>
 
-  <ion-list>
-    <ion-item *ngFor="let item of cartList; let i = index" (click)="presentAlertConfirm(item, i)">
-      <ion-grid>
-        <ion-row>
-          <ion-col size="2">{{ item.quantity }}X</ion-col>
-          <ion-col>{{ item.product.name }}</ion-col>
-          <ion-col size="3">
-            ${{ item.price_total | number : '1.2-2' }}
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-    </ion-item>
-  </ion-list>
+  <ng-container *ngIf="!isEmpty">
+    <ion-list>
+      <ion-item *ngFor="let item of cartList; let i = index" (click)="presentDeleteConfirm(item, i)">
+        <ion-grid>
+          <ion-row>
+            <ion-col size="2">{{ item.quantity }}X</ion-col>
+            <ion-col>{{ item.product.name }}</ion-col>
+            <ion-col size="3">
+              ${{ item.price_total | number : '1.2-2' }}
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-item>
+    </ion-list>
+  </ng-container>
+
+  <!-- Si el carrito de compras esta vacio -->
+  <ng-container *ngIf="isEmpty">
+    <ion-toolbar color="danger">
+      <ion-icon name="cart-outline" slot="start" size="large"></ion-icon>
+      <ion-title>The shopping cart is empty</ion-title>
+    </ion-toolbar>
+  </ng-container>
+
+  <!-- Si los productos no cumplen con el pedido minimo para pagar con tarjeta -->
+  <ng-container *ngIf="!meetsMinimum">
+    <ion-toolbar color="primary">
+      <ion-icon name="card-outline" slot="start" size="large"></ion-icon>
+      <ion-label>The minimum payment by card is: ${{ minimumOrderWithCard }}</ion-label>
+    </ion-toolbar>
+  </ng-container>
 
   <ion-list>
     <ion-item>
@@ -58,7 +76,7 @@
     <!-- Cupón de descuento -->
     <ion-item class="mt-5">
       <ion-label class="w-bold">Coupon</ion-label>
-      <ion-input class="ion-text-center" placeholder="Coupon code"></ion-input>
+      <ion-input type="text" [(ngModel)]="couponCode" name="couponCode" class="ion-text-center" placeholder="Coupon code"></ion-input>
       <ion-button color="dark">APPLY COUPON</ion-button>
     </ion-item>
 
@@ -74,7 +92,7 @@
 
 <!-- Footer -->
 <ion-footer>
-  <ion-button expand="block" color="danger" (click)="goToAuthUser(false)">
+  <ion-button [disabled]="isEmpty" expand="block" color="danger" (click)="goToAuthUser(false)">
     Continue
   </ion-button>
 </ion-footer>

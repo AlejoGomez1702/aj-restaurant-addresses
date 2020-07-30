@@ -9,5 +9,8 @@ export interface OptionProduct
         name: string,
         tax?: number,
         value?: number
-    }
+    },
+
+    //Observaciones del producto.
+    observations?: string
 }

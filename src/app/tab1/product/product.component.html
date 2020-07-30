@@ -97,10 +97,9 @@
         
       </ion-list>
     </ng-container>
-
-
   </div>
 
+  <!-- Product observations -->
   <div class="small-margin">
     <ion-grid>
       <ion-row>
@@ -113,7 +112,7 @@
 
       <!-- Input field  -->
       <ion-row>
-        <ion-textarea placeholder="Ex: without onion, spicy, mayonnaise aside, etc."></ion-textarea>
+        <ion-textarea type="text" [(ngModel)]="observations" name="observations" placeholder="Ex: without onion, spicy, mayonnaise aside, etc."></ion-textarea>
         <!-- <ion-input placeholder="Ex: without onion, spicy, mayonnaise aside, etc."></ion-input> -->
       </ion-row>
 

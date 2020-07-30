@@ -7,7 +7,8 @@ import { environment } from '../../environments/environment';
 import { RegisterForm } from '../interfaces/RegisterForm';
 import { Router } from '@angular/router';
 import { Street } from '../interfaces/Street';
-import { Observable, of, Subject } from 'rxjs';
+import { Observable, of, Subject, from } from 'rxjs';
+import { GeneralInformation } from '../interfaces/GeneralInformation';
 
 
 @Injectable({
@@ -28,11 +29,6 @@ export class FirebaseService
     'https://firebasestorage.googleapis.com/v0/b/crud-ionic-c3d18.appspot.com/o/payments%2Fdinners_icon.png?alt=media&token=74d740d7-13a3-4e1f-a7da-573b1bf3a72e',
 
     'https://firebasestorage.googleapis.com/v0/b/crud-ionic-c3d18.appspot.com/o/payments%2Fcash_icon.png?alt=media&token=fa5c5aa1-fcc8-4e1c-8d53-bad6c7c0a40d'
-    // 'https://firebasestorage.googleapis.com/v0/b/crud-ionic-c3d18.appspot.com/o/payments%2Famerican_express_card.svg?alt=media&token=ee6e9dc9-0f64-4928-8c58-a44e24f10ca6',
-    // 'https://firebasestorage.googleapis.com/v0/b/crud-ionic-c3d18.appspot.com/o/payments%2Fdinners-club_card.svg?alt=media&token=d4e72cab-cf89-43e6-aab1-2b1a53dc1d61',
-    // 'https://firebasestorage.googleapis.com/v0/b/crud-ionic-c3d18.appspot.com/o/payments%2Fdinners-club_card.svg?alt=media&token=d4e72cab-cf89-43e6-aab1-2b1a53dc1d61',
-    // 'https://firebasestorage.googleapis.com/v0/b/crud-ionic-c3d18.appspot.com/o/payments%2Fdinners-club_card.svg?alt=media&token=d4e72cab-cf89-43e6-aab1-2b1a53dc1d61',
-    // 'https://firebasestorage.googleapis.com/v0/b/crud-ionic-c3d18.appspot.com/o/payments%2Fdollar.svg?alt=media&token=dc3fd93f-dae2-4fd0-b82c-6311fa666bf0'
   ];
 
   // Productos que se ofrecen en el restaurante.
@@ -40,6 +36,14 @@ export class FirebaseService
 
   // Usuario autenticado actualmente.
   public user: UserAuth;
+
+  // Información general del restaurante.
+  public generalInformation: GeneralInformation  = {
+    domicile_time: '45',
+    minimum_with_card: 15,
+    pik_time: '25',
+    restaurant_name: 'La Perrada De Chalo'
+  };;
 
 
   // *******PERMITE REFRESCAR LAS DIRECCIONES NUEVAS EN LA VISTA.*********//
@@ -66,8 +70,30 @@ export class FirebaseService
 
   initInformation()
   {
+    this.initGeneralInformation();
     this.loadCoverFile();
-    this.initAllProducts();
+    this.initAllProducts();    
+  }
+
+  /**
+   * Inicializa la información general del restaurante.
+   */
+  initGeneralInformation()
+  {
+    const db = firebase.firestore();
+    db.collection('general_information').doc('general_information').get()
+    .then((information) => {
+      if (information.exists) {
+        console.log("General Information:", information.data());
+        this.generalInformation = <GeneralInformation>information.data();
+      } else {
+          // doc.data() will be undefined in this case
+          console.log("No such document!");
+      }
+    }).catch((error) => {
+      console.log(error);
+    });
+
   }
 
   /**
@@ -206,6 +232,7 @@ export class FirebaseService
           street_optional: form.street_optional
         }
       ],
+      zip: form.zip,
       email: form.email,
       phone: form.phone
     }).then(() => {

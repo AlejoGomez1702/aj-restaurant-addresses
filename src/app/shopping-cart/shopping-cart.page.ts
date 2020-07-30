@@ -13,6 +13,8 @@ import { FirebaseService } from '../services/firebase.service';
 })
 export class ShoppingCartPage implements OnInit 
 {
+  public minimumOrderWithCard: number;
+
   // Listado de productos en el carrito de compras.
   public cartList: CartList[] = [];
 
@@ -22,6 +24,15 @@ export class ShoppingCartPage implements OnInit
   // Tax total de todos los productos.
   public taxTotal: number;
 
+  // inidica si hay o no productos en el carrito.
+  public isEmpty: boolean;
+
+  // Indica si los productos en el carrito cumplen con el pedido minímo.
+  public meetsMinimum: boolean;
+
+  // cupon de descuento ingresado por el usuario.
+  public couponCode: string;
+
   constructor(
     private router: Router,
     private shoppingCartService: ShoppingCartService,
@@ -30,34 +41,21 @@ export class ShoppingCartPage implements OnInit
     private firebaseService: FirebaseService
   ) 
   {
-    this.cartList = this.shoppingCartService.cartList;
-    this.calculatePrices();
+    this.minimumOrderWithCard = 15; // ****************** Consumir dato de firebase
+    this.couponCode = '';
+    // this.cartList = this.shoppingCartService.cartList;
+    // this.calculatePrices();
     this.goToAuthUser(true);
+    this.refreshInformation();
   }
 
   ngOnInit() {
   }
 
   /**
-   * Calcula el subtotal y el tax de la lista en el carrito de compras.
-   */
-  calculatePrices()
-  {
-    this.subtotal = 0;
-    this.taxTotal = 0;
-
-    for (let i = 0; i < this.cartList.length; i++) 
-    {
-      const element = this.cartList[i];
-      this.subtotal += element.price_total;
-      this.taxTotal += element.total_tax;      
-    }
-  }
-
-  /**
    * Dialogo para eliminar un producto del carrito de compras.
    */
-  async presentAlertConfirm(item: CartList, index: number) 
+  async presentDeleteConfirm(item: CartList, index: number) 
   {
     // console.log('El producto a eliminar es: ');
     // console.log(this.cartList[index]);
@@ -77,14 +75,32 @@ export class ShoppingCartPage implements OnInit
           text: 'Delete',
           cssClass: 'danger',
           handler: () => {
-            this.cartList.splice(index, 1);
-            this.calculatePrices();
+            // this.cartList.splice(index, 1);
+            // this.calculatePrices();
+            this.shoppingCartService.deleteProduct(index);
+            this.refreshInformation();
           }
         }
       ]
     });
 
     await alert.present();
+  }
+
+  /**
+   * Refresca la información base del carrito de compras.
+   */
+  refreshInformation()
+  {
+    this.cartList = this.shoppingCartService.cartList;
+    this.subtotal = this.shoppingCartService.subtotal;
+    this.taxTotal = this.shoppingCartService.taxTotal;
+
+    // Hay o no productos en la lista del carrito.
+    (this.cartList.length == 0) ? this.isEmpty = true : this.isEmpty = false;    
+
+    // Se puede o no pagar con tarjeta de crédito dependiendo del minimo aceptado con este medio.
+    ((this.subtotal + this.taxTotal) > this.minimumOrderWithCard) ? this.meetsMinimum = true : this.meetsMinimum = false;
   }
 
   /**
@@ -121,6 +137,7 @@ export class ShoppingCartPage implements OnInit
 
     if(!first)
     {
+      this.shoppingCartService.couponCode = this.couponCode;
       this.router.navigate([url]);
     }
   }

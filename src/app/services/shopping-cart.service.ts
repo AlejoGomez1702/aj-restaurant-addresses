@@ -9,6 +9,15 @@ import { OptionProduct } from '../interfaces/OptionProduct';
 })
 export class ShoppingCartService 
 {
+  // Subtotal de todos los productos
+  public subtotal: number;
+
+  // Tax total de todos los productos.
+  public taxTotal: number;
+
+  // Cupon de descuento si se ingreso por parte del usuario.
+  public couponCode: string;
+
   // Producto temporal para cuando se desea agregar.
   public tempProduct: Product;
 
@@ -18,7 +27,10 @@ export class ShoppingCartService
   constructor(
     private router: Router
   ) 
-  { }
+  { 
+    this.subtotal = 0;
+    this.taxTotal = 0;
+  }
 
   /**
    * Añade un producto al carrito de compras.
@@ -42,6 +54,7 @@ export class ShoppingCartService
     }
 
     this.getTotalOfItems();
+    this.calculatePrices();
 
     console.log('Carrito de compras');
     console.log(this.cartList);
@@ -55,6 +68,16 @@ export class ShoppingCartService
   {
     this.tempProduct = product;
     this.router.navigate(['/tabs/tab1/addProduct'])
+  }
+
+  /**
+   * 
+   * @param index 
+   */
+  deleteProduct(index: number)
+  {
+    this.cartList.splice(index, 1);
+    this.calculatePrices();
   }
 
   /**
@@ -203,6 +226,22 @@ export class ShoppingCartService
           break;
       }
       
+    }
+  }
+
+  /**
+   * Calcula el subtotal y el tax de la lista en el carrito de compras.
+   */
+  calculatePrices()
+  {
+    this.subtotal = 0;
+    this.taxTotal = 0;
+
+    for (let i = 0; i < this.cartList.length; i++) 
+    {
+      const element = this.cartList[i];
+      this.subtotal += element.price_total;
+      this.taxTotal += element.total_tax;      
     }
   }
 
