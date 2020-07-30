@@ -15,6 +15,7 @@ import { AppComponent } from './app.component';
 import {FirebaseUIModule, firebase, firebaseui} from 'firebaseui-angular';
 import {AngularFireModule} from '@angular/fire';
 import {AngularFireAuthModule} from '@angular/fire/auth';
+import { CardNumberPipe } from './pipes/card-number.pipe';
 
 
 const firebaseUiAuthConfig: firebaseui.auth.Config = {
@@ -49,7 +50,7 @@ const firebaseUiAuthConfig: firebaseui.auth.Config = {
 
 
 @NgModule({
-  declarations: [AppComponent,],
+  declarations: [AppComponent, CardNumberPipe,],
   entryComponents: [],
   imports: [
     BrowserModule, 

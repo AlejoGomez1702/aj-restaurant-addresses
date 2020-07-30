@@ -6,7 +6,6 @@ import { ProductsList } from '../interfaces/ProductsList';
 import { environment } from '../../environments/environment';
 import { RegisterForm } from '../interfaces/RegisterForm';
 import { Router } from '@angular/router';
-import { AuthService } from './auth.service';
 import { Street } from '../interfaces/Street';
 import { Observable, of, Subject } from 'rxjs';
 
