@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { Street } from '../interfaces/Street';
 import { Observable, of, Subject, from } from 'rxjs';
 import { GeneralInformation } from '../interfaces/GeneralInformation';
+import { Sale } from '../interfaces/Sale';
 
 
 @Injectable({
@@ -295,6 +296,18 @@ export class FirebaseService
   getLoginUser(): Observable<UserAuth>
   {
     return of(this.user);
+  }
+
+  /**
+   * Registra un pedido en la base de datos de firebase.
+   * @param sale 
+   */
+  registerSale(sale: Sale)
+  {
+    console.log('El pedido que se intenta registrar es:');
+    console.log(sale);
+    const db = firebase.firestore();
+    return db.collection('sales').add(sale);
   }
 
 }

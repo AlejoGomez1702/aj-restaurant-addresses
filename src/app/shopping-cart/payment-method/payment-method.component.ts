@@ -6,6 +6,9 @@ import { FormGroup, FormControl } from '@angular/forms';
 // Payments with Stripe.
 import { Stripe } from '@ionic-native/stripe/ngx';
 import { environment } from 'src/environments/environment';
+import { ShoppingCartService } from 'src/app/services/shopping-cart.service';
+import { FirebaseService } from 'src/app/services/firebase.service';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-payment-method',
@@ -16,6 +19,9 @@ export class PaymentMethodComponent implements OnInit
 {
   public card: boolean;
   public cash: boolean;
+
+  // El pedido se puede pagar con tarjeta.
+  public acceptCard: boolean;
 
   // Datos de la tarjeta con la que el cliente va pagar.
   cardDetails = {
@@ -41,13 +47,22 @@ export class PaymentMethodComponent implements OnInit
 
   constructor(
     private authService: AuthService,
+    private shoppingCartService: ShoppingCartService,
+    private firebaseService: FirebaseService,
     private stripe: Stripe,
-    private router: Router
+    private router: Router,
+    public alertController: AlertController,
   ) 
   { 
     // this.backCash = 0;
     this.card = false;
     this.cash = false;
+    //         Si el dinero total del carrito (Subtotal + Tax) es mayor que...               ||
+    //            ...el dinero minímo aceptado por el restaurante                            ||
+    //                                                                                       ||
+    //                                                                                       \/
+    this.acceptCard = (this.shoppingCartService.subtotal + this.shoppingCartService.taxTotal) >  
+                            (this.firebaseService.generalInformation.minimum_with_card)
   }
 
   ngOnInit() {}
@@ -78,8 +93,35 @@ export class PaymentMethodComponent implements OnInit
    */
   payWithCash()
   {
-    
+    const refundMoney = this.cashForm.controls['back_cash'].value;
+    this.shoppingCartService.saleInformation.refund_money = refundMoney;
+
+    this.shoppingCartService.registerSale()
+    .then(() => {
+      this.presentSaleSuccesfull();   
+      this.router.navigate(['tabs/tab1']);   
+    }).catch((error) => {
+      console.log(error);
+    });
   }
+
+  /**
+   * Dialogo de compra realizada satisfactoriamente.
+   */
+  async presentSaleSuccesfull() 
+  {
+    // console.log('El producto a eliminar es: ');
+    // console.log(this.cartList[index]);
+    const alert = await this.alertController.create({
+      cssClass: 'my-custom-class',
+      header: 'Congratulations!',
+      message: 'your order has been completed',
+
+    });
+
+    await alert.present();
+  }
+
 
   showInfo()
   {

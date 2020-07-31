@@ -3,6 +3,7 @@ import { FirebaseService } from 'src/app/services/firebase.service';
 import { UserAuth } from 'src/app/interfaces/UserAuth';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { ShoppingCartService } from 'src/app/services/shopping-cart.service';
 
 @Component({
   selector: 'app-addresses',
@@ -20,14 +21,19 @@ export class AddressesComponent implements OnInit
   // Indica si se selecciono una opción de dirección.
   public isAddressSelected: boolean;
 
+  // Inidica si el pedido se va tomar en el restaurante o no.
+  public pickup: boolean;
+
   // Sirve para que la página se refresca con una nueva dirección.
   // mySubscription: any;
 
   constructor(
     private fbService: FirebaseService,
+    private shoppingCartService: ShoppingCartService,
     private router: Router
   ) 
   {
+    this.pickup = false;
     this.initInformation();
     this.fbService.componentMethodCalled$.subscribe(() => {
       this.initInformation();
@@ -56,15 +62,14 @@ export class AddressesComponent implements OnInit
     }
   }
 
-
   /**
    * 
    * @param index 
    */
   verifyAddress(index: number): boolean
   {    
-    console.log('Direcciones');
-    console.log(this.addresses);
+    // console.log('pickup');
+    // console.log(this.pickup);
     let selected = false;
     for (const address of this.addresses) 
     {
@@ -101,7 +106,44 @@ export class AddressesComponent implements OnInit
         }
       }
     }
+  }
 
+  /**
+   * Escribe en el servicio del carrito de compras los datos de la dirección.
+   */
+  procesAddress()
+  {
+    // Si el pedido se va tomar en el restaurante.
+    if(this.pickup)
+    {
+      this.shoppingCartService.saleInformation = {pikup: true};
+    }
+    else{ // Si se requiere a domicilio
+      const index = this.getSelectedAddress();
+      const address = this.user.addresses[index];
+      
+      this.shoppingCartService.saleInformation = {pikup: false, address: address};
+    }
+
+    console.log('Información de la dirección: ');
+    console.log(this.shoppingCartService.saleInformation);
+
+    this.goToPaymentUrl();
+  }
+
+  /**
+   * Obtiene el indice de la dirección seleccionada por el usuario.
+   */
+  getSelectedAddress(): number
+  {
+    for (let i = 0; i < this.addresses.length; i++) 
+    {
+      const address = this.addresses[i];
+      if(address)
+      {
+        return i;
+      }
+    }
   }
 
   /**

@@ -3,12 +3,25 @@ import { Product } from '../interfaces/Product';
 import { Router } from '@angular/router';
 import { CartList } from '../interfaces/CartList';
 import { OptionProduct } from '../interfaces/OptionProduct';
+import { Street } from '../interfaces/Street';
+import { FirebaseService } from './firebase.service';
+import { Sale } from '../interfaces/Sale';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ShoppingCartService 
 {
+  // Contiene la información adicional que se requiere para terminar el pedido.
+  public saleInformation: {
+    pikup: boolean,
+    address?: Street,
+    with_card?: boolean,
+    refund_money?: number
+  } = {
+    pikup: false
+  };
+
   // Subtotal de todos los productos
   public subtotal: number;
 
@@ -25,7 +38,8 @@ export class ShoppingCartService
   public cartList: CartList[] = [];
 
   constructor(
-    private router: Router
+    private router: Router,
+    private fbService: FirebaseService
   ) 
   { 
     this.subtotal = 0;
@@ -164,6 +178,24 @@ export class ShoppingCartService
     }
 
     return false;
+  }
+
+  /**
+   * Le pide al servicio de firebase que cree una venta en la base de datos.
+   */
+  registerSale()
+  {
+    // Junto toda la información para que firebase me cree el nuevo pedido.
+    const sale: Sale = {
+      sale_information: this.saleInformation,
+      coupon_code: this.couponCode,
+      subtotal: this.subtotal,
+      tax_total: this.taxTotal,
+      total: this.subtotal + this.taxTotal,
+      cart_list: this.cartList
+    };
+
+    return this.fbService.registerSale(sale);
   }
 
   /**
