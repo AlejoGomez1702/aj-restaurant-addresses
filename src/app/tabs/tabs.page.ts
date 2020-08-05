@@ -15,6 +15,10 @@ export class TabsPage
     private fbService: FirebaseService
   ) 
   {
+    this.verifyUserAuth();
+    this.fbService.updateStateAuth$.subscribe(() => {
+      this.verifyUserAuth();
+    });
   }
 
   /**
@@ -22,13 +26,15 @@ export class TabsPage
    */
   verifyUserAuth()
   {
-    if(this.fbService.user)
+    console.log('Pequeña pruebitaaa');
+    console.log(this.fbService.user); 
+    if(this.fbService.user != null)
     {
-      this.isLogin = true;
+      this.isLogin = false;
     }
     else
     {
-      this.isLogin = false;
+      this.isLogin = true;
     }
   }
 

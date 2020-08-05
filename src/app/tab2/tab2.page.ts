@@ -11,7 +11,7 @@ import { AuthService } from '../services/auth.service';
 })
 export class Tab2Page 
 {
-  public images: string[] = [];
+  public images: string[][];
 
   public sliderOptions = {
     zoom: false,
@@ -26,7 +26,7 @@ export class Tab2Page
     private authService: AuthService
   ) 
   {
-    this.images = [<string>this.fbService.coverPageURL,<string>this.fbService.coverPageURL,<string>this.fbService.coverPageURL,<string>this.fbService.coverPageURL,<string>this.fbService.coverPageURL,<string>this.fbService.coverPageURL,<string>this.fbService.coverPageURL,<string>this.fbService.coverPageURL];
+    this.images = this.fbService.galleryImages;
   }
 
   /**

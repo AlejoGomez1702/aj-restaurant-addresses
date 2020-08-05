@@ -8,35 +8,27 @@
 
 <ion-content padding>
   <ion-slides [options]="sliderOptions">
-    <ion-slide *ngFor="let img of images">
+    <ion-slide *ngFor="let img of images[0]">
       <img src="{{img}}" tappable (click)="openPreview(img)">
     </ion-slide>
   </ion-slides>
 
   <ion-slides [options]="sliderOptions">
-    <ion-slide *ngFor="let img of images">
+    <ion-slide *ngFor="let img of images[1]">
       <img src="{{img}}" tappable (click)="openPreview(img)">
     </ion-slide>
   </ion-slides>
 
   <ion-slides [options]="sliderOptions">
-    <ion-slide *ngFor="let img of images">
+    <ion-slide *ngFor="let img of images[2]">
       <img src="{{img}}" tappable (click)="openPreview(img)">
     </ion-slide>
   </ion-slides>
 
   <ion-slides [options]="sliderOptions">
-    <ion-slide *ngFor="let img of images">
+    <ion-slide *ngFor="let img of images[3]">
       <img src="{{img}}" tappable (click)="openPreview(img)">
     </ion-slide>
   </ion-slides>
-
-  <!-- <ion-button (click)="salir()">Salir</ion-button> -->
-
-  <!-- <ion-slides [options]="sliderOptions">
-    <ion-slide *ngFor="let img of images">
-      <img src="{{img}}" tappable (click)="openPreview(img)">
-    </ion-slide>
-  </ion-slides> -->
 
 </ion-content>

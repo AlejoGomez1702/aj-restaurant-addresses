@@ -11,6 +11,8 @@ import { Observable, of, Subject, from } from 'rxjs';
 import { GeneralInformation } from '../interfaces/GeneralInformation';
 import { Sale } from '../interfaces/Sale';
 
+import { data } from '../assets-firestorage/data';
+ 
 
 @Injectable({
   providedIn: 'root'
@@ -18,19 +20,13 @@ import { Sale } from '../interfaces/Sale';
 export class FirebaseService 
 {
   // Imagen principal de la aplicación.
-  public coverPageURL: String = 'https://firebasestorage.googleapis.com/v0/b/crud-ionic-c3d18.appspot.com/o/cover-page%2Fcover-page.png?alt=media&token=3bb9535d-1251-4589-b1d3-fae866264c8c';
+  public coverPageURL: String = data.coverPageURL;
 
   // Imagenes de los medios de pago disponibles.
-  public paymentsImages = [
-    'https://firebasestorage.googleapis.com/v0/b/crud-ionic-c3d18.appspot.com/o/payments%2Fvisa_icon.png?alt=media&token=6443e28b-4e0e-4f8d-bdac-0157c4f592b3',
-    'https://firebasestorage.googleapis.com/v0/b/crud-ionic-c3d18.appspot.com/o/payments%2Famerica_icon.png?alt=media&token=81467564-fe44-48d0-a65c-b174589f36a3',
-    'https://firebasestorage.googleapis.com/v0/b/crud-ionic-c3d18.appspot.com/o/payments%2Fmaster_icon.png?alt=media&token=87d30447-cf5c-4efe-ba68-ba852e932ecf',
-    'https://firebasestorage.googleapis.com/v0/b/crud-ionic-c3d18.appspot.com/o/payments%2Fdisscover_icon.png?alt=media&token=9d5a2cb0-cffa-417b-8718-6ade59107071',
-    'https://firebasestorage.googleapis.com/v0/b/crud-ionic-c3d18.appspot.com/o/payments%2Fjcb_icon.png?alt=media&token=935d7050-a8c3-4104-abf1-dfa5dc694b0d',
-    'https://firebasestorage.googleapis.com/v0/b/crud-ionic-c3d18.appspot.com/o/payments%2Fdinners_icon.png?alt=media&token=74d740d7-13a3-4e1f-a7da-573b1bf3a72e',
+  public paymentsImages = data.paymentsImages;
 
-    'https://firebasestorage.googleapis.com/v0/b/crud-ionic-c3d18.appspot.com/o/payments%2Fcash_icon.png?alt=media&token=fa5c5aa1-fcc8-4e1c-8d53-bad6c7c0a40d'
-  ];
+  // Imagenes de la galeria.
+  public galleryImages = data.galleryImages;
 
   // Productos que se ofrecen en el restaurante.
   public products: ProductsList[] = [];
@@ -39,20 +35,19 @@ export class FirebaseService
   public user: UserAuth;
 
   // Información general del restaurante.
-  public generalInformation: GeneralInformation  = {
-    domicile_time: '45',
-    minimum_with_card: 15,
-    pik_time: '25',
-    restaurant_name: 'La Perrada De Chalo'
-  };;
-
+  public generalInformation: GeneralInformation = data.generalInformation;
 
   // *******PERMITE REFRESCAR LAS DIRECCIONES NUEVAS EN LA VISTA.*********//
   // Observable string sources
   private componentMethodCallSource = new Subject<any>();
-
-  // Observable string streams
   componentMethodCalled$ = this.componentMethodCallSource.asObservable();
+  //********************************************************************* */
+
+  //*******PERMITE INDICAR SI LA VISTA PROFILE ESTA DISPONIBLE O NO******* */
+  private updateStateAuth = new Subject<any>();
+  updateStateAuth$ = this.updateStateAuth.asObservable();
+  //********************************************************************** */
+
 
   constructor(
     private db: AngularFirestore,
@@ -63,11 +58,19 @@ export class FirebaseService
     this.initInformation();
   }
 
-  //********************************
-  // Service message commands
+  //****************************************************
+  // PERMITE REFRESCAR LAS DIRECCIONES NUEVAS EN LA VISTA
   callComponentMethod() {
     this.componentMethodCallSource.next();
   }
+
+  //************************************************ */
+  //*******PERMITE INDICAR SI LA VISTA PROFILE ESTA DISPONIBLE O NO***//
+  updateUserAuthState()
+  {
+    this.updateStateAuth.next();
+  }
+  //************************************************ */
 
   initInformation()
   {
@@ -259,6 +262,7 @@ export class FirebaseService
       if (user.exists) {
         console.log("Document data:", user.data());
         this.user = <UserAuth>user.data();
+        this.updateUserAuthState();
       } else {
           // doc.data() will be undefined in this case
           console.log("No such document!");
@@ -278,7 +282,7 @@ export class FirebaseService
       // const db = firebase.firestore();
       this.db.collection('users').doc(this.user.uid).set(this.user)
       .then(() => {
-        this.callComponentMethod();
+        this.callComponentMethod(); // Refresca el listado de direcciónes directamente en el componente.
         this.router.navigate(['shopping-cart/addresses']); 
         return true;
       }).catch((error) => {
