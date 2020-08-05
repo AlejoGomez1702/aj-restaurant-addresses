@@ -50,9 +50,12 @@ export class AddressesComponent implements OnInit
   initInformation()
   {
     this.isAddressSelected = false;
-    this.fbService.getLoginUser().subscribe((user) => {
-      this.user = user;
-    });
+
+    this.user = this.fbService.getLoginUser();
+
+    // this.fbService.getLoginUser().subscribe((user) => {
+    //   this.user = user;
+    // });
 
     const numAddresses = this.user.addresses.length;
     this.addresses = [];

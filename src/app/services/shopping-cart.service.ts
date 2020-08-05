@@ -6,6 +6,7 @@ import { OptionProduct } from '../interfaces/OptionProduct';
 import { Street } from '../interfaces/Street';
 import { FirebaseService } from './firebase.service';
 import { Sale } from '../interfaces/Sale';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -39,7 +40,8 @@ export class ShoppingCartService
 
   constructor(
     private router: Router,
-    private fbService: FirebaseService
+    private fbService: FirebaseService,
+    private authService: AuthService
   ) 
   { 
     this.subtotal = 0;
@@ -53,6 +55,7 @@ export class ShoppingCartService
    */
   addProduct(product: Product, quantity: number, options: OptionProduct, type: number)
   {
+    console.log('Agregando un nuevo producto al carrito de compras');
     const productToAdd = {
       type: type,
       quantity: quantity,
@@ -183,19 +186,30 @@ export class ShoppingCartService
   /**
    * Le pide al servicio de firebase que cree una venta en la base de datos.
    */
-  registerSale()
+  async registerSale()
   {
-    // Junto toda la información para que firebase me cree el nuevo pedido.
-    const sale: Sale = {
-      sale_information: this.saleInformation,
-      coupon_code: this.couponCode,
-      subtotal: this.subtotal,
-      tax_total: this.taxTotal,
-      total: this.subtotal + this.taxTotal,
-      cart_list: this.cartList
-    };
+    this.authService.getCurrentUser().then((user) => {
+      // Junto toda la información para que firebase me cree el nuevo pedido.
+      const sale: Sale = {
+        sale_information: this.saleInformation,
+        coupon_code: this.couponCode,
+        subtotal: this.subtotal,
+        tax_total: this.taxTotal,
+        total: this.subtotal + this.taxTotal,
+        cart_list: this.cartList,
+        user: {
+          email: user.email,
+          uid: user.uid
+        }
+      };
+      console.log('El pedidoooooo essssssssssss: ');
+      console.log(sale);
 
-    return this.fbService.registerSale(sale);
+      return this.fbService.registerSale(sale); //*****************LLAMAAARRRRRR************ */
+
+    }).catch((error) => {
+      console.log(error);
+    });
   }
 
   /**
@@ -275,6 +289,25 @@ export class ShoppingCartService
       this.subtotal += element.price_total;
       this.taxTotal += element.total_tax;      
     }
+  }
+
+  /**
+   * Cuando se termina un pedido se llama a esta función
+   * la cual se encarga de vaciar por completo el carrito.
+   */
+  refreshCart()
+  {
+    console.log('se esta refrescando el carrito');
+
+    this.subtotal = 0;
+    this.taxTotal = 0;
+    this.saleInformation = {
+      pikup: false
+    };
+
+    this.couponCode = '';
+    this.tempProduct = null;
+    this.cartList = [];
   }
 
 

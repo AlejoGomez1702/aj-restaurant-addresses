@@ -1,14 +1,13 @@
 import { Injectable } from '@angular/core';
-import { User } from 'firebase';
-
 import { Router } from '@angular/router';
 import { auth } from 'firebase/app';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
-import { switchMap, first } from 'rxjs/operators';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { first } from 'rxjs/operators';
 import { RegisterForm } from '../interfaces/RegisterForm';
 import { LoginForm } from '../interfaces/LoginForm';
 import { FirebaseService } from './firebase.service';
+import { UserAuth } from '../interfaces/UserAuth';
  
 @Injectable({
   providedIn: 'root'
@@ -16,7 +15,7 @@ import { FirebaseService } from './firebase.service';
 export class AuthService 
 {
   // Usuario que se esta intentando autenticar.
-  private user : User;
+  public user : UserAuth;
 
   // Hay un usuario logueado o no.
   public isLogin: boolean;
@@ -50,7 +49,7 @@ export class AuthService
 
   /**
    * Iniciar sesión con correo y contraseña en firebase.
-   * @param email Correo eléctronico.
+   * @param email Correo electrónico.
    * @param password Contraseña.
    */
   async login(data: LoginForm)

@@ -78,15 +78,24 @@
       <form [formGroup]="cashForm" (ngSubmit)="payWithCash()">
         <ion-item>
           <ion-label position="floating">Enter the amount...</ion-label>
-          <ion-input required="true" type="number" formControlName="back_cash"></ion-input>
+          <ion-input required="true" type="number" formControlName="back_cash" (ionChange)="verifyAmmount()"></ion-input>
           <ion-icon name="logo-usd" slot="start"></ion-icon> 
         </ion-item>
   
         <!-- CALL TO ACTION FORM -->
         <ion-footer class="mt-25">
-          <ion-button expand="block" color="dark" type="submit" [disabled]="!cashForm.valid">Continue</ion-button>
+          <ion-button expand="block" color="dark" type="submit" [disabled]="!cashForm.valid || !isCorrectAmmount">Continue</ion-button>
+          <!-- Se deshabilita cuando. ==> El formulario es inválido  || El monto introducido es incorrecto  -->
         </ion-footer>
       </form>
+
+
+      <!-- Alerta cuando se seleccionan las dos opciones -->
+      <ng-container *ngIf="!isCorrectAmmount">
+        <div class="ion-text-center">
+          <ion-label color="danger">The entered value must be greater than the total order value</ion-label>
+        </div>    
+      </ng-container>
     </div>
   </ng-container>
 
@@ -94,17 +103,7 @@
   <ng-container *ngIf="cash && card">
     <div class="ion-text-center">
       <ion-label color="danger">Select Only One</ion-label>
-    </div>
-    
+    </div>    
   </ng-container>
-
-
 </ion-content>
 
-
-
-
-
-<p (click)="salir()">
-  Salir
-</p>

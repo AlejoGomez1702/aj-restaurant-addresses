@@ -49,7 +49,9 @@ export class ShoppingCartPage implements OnInit
     this.refreshInformation();
   }
 
-  ngOnInit() {
+  ngOnInit() 
+  {
+    // this.user = this.firebaseService.getLoginUser();
   }
 
   /**
@@ -118,8 +120,9 @@ export class ShoppingCartPage implements OnInit
         this.firebaseService.getUserByUid(user.uid);
       });
 
-      this.firebaseService.getLoginUser()
-      .subscribe((user) => {
+      let user = this.firebaseService.getLoginUser();
+      // .subscribe((user) => {
+        this.authService.user = user;
         if(!user.email || !user.phone || user.addresses.length == 0)
         {
           url = '/auth/complete-data';
@@ -128,7 +131,7 @@ export class ShoppingCartPage implements OnInit
         {
           url = '/shopping-cart/addresses';
         }
-      });
+      // });
     }
     else
     {

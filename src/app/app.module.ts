@@ -22,6 +22,7 @@ import { CardNumberPipe } from './pipes/card-number.pipe';
 
 // Stripe (Payments)
 import { Stripe } from '@ionic-native/stripe/ngx';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
 
 
 const firebaseUiAuthConfig: firebaseui.auth.Config = {
@@ -67,6 +68,7 @@ const firebaseUiAuthConfig: firebaseui.auth.Config = {
     AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFireAuthModule,
+    AngularFirestoreModule,
     FirebaseUIModule.forRoot(firebaseUiAuthConfig)
   ],
   providers: [

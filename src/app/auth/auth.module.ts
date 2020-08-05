@@ -8,6 +8,7 @@ import { AuthPageRoutingModule } from './auth-routing.module';
 
 import { AuthPage } from './auth.page';
 import { RegisterComponent } from './register/register.component';
+import { CompleteDataComponent } from './complete-data/complete-data.component';
 
 @NgModule({
   imports: [
@@ -18,6 +19,6 @@ import { RegisterComponent } from './register/register.component';
     ReactiveFormsModule,
     FormsModule,
   ],
-  declarations: [AuthPage, RegisterComponent]
+  declarations: [AuthPage, RegisterComponent, CompleteDataComponent]
 })
 export class AuthPageModule {}

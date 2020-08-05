@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import * as firebase from 'firebase';
+// import * as firebase from 'firebase';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { Product } from '../interfaces/Product'; 
 import { UserAuth } from '../interfaces/UserAuth';
 import { ProductsList } from '../interfaces/ProductsList';
-import { environment } from '../../environments/environment';
 import { RegisterForm } from '../interfaces/RegisterForm';
 import { Router } from '@angular/router';
 import { Street } from '../interfaces/Street';
@@ -55,11 +55,11 @@ export class FirebaseService
   componentMethodCalled$ = this.componentMethodCallSource.asObservable();
 
   constructor(
-    // private authService: AuthService,
+    private db: AngularFirestore,
     private router: Router
   ) 
   {
-    firebase.initializeApp(environment.firebaseConfig);
+    // firebase.initializeApp(environment.firebaseConfig);
     this.initInformation();
   }
 
@@ -81,9 +81,11 @@ export class FirebaseService
    */
   initGeneralInformation()
   {
-    const db = firebase.firestore();
-    db.collection('general_information').doc('general_information').get()
-    .then((information) => {
+    // const variable = this.db.collection('general_information').doc('general_information').get();
+
+    // const db = firebase.firestore();
+    this.db.collection('general_information').doc('general_information').get()
+    .subscribe((information) => {
       if (information.exists) {
         console.log("General Information:", information.data());
         this.generalInformation = <GeneralInformation>information.data();
@@ -91,10 +93,7 @@ export class FirebaseService
           // doc.data() will be undefined in this case
           console.log("No such document!");
       }
-    }).catch((error) => {
-      console.log(error);
     });
-
   }
 
   /**
@@ -102,10 +101,11 @@ export class FirebaseService
    */
   initAllProducts()
   {
-    const db = firebase.firestore();
+    // const db = firebase.firestore();
 
     // Estoy recorriendo todas las categorias de los productos.
-    db.collection('categories').get().then((categories) => {
+    this.db.collection('categories').get()
+    .subscribe((categories) => {
         categories.forEach((category) => {
           let categoryName = <string> category.data().name; // nombre para mostrar en la vista.
           let collectionName = <string> category.data().collection; // nombre de la colección de productos.
@@ -113,7 +113,7 @@ export class FirebaseService
           if(collectionName) // si existe el atributo "collection" en la categoria del producto.
           {
             // Obteniendo el listado de productos correspondientes a la categoria.
-            db.collection(collectionName).get().then((products) => {
+            this.db.collection(collectionName).get().subscribe((products) => {
               let categoryProducts = [];
               products.forEach((product) => {
                 categoryProducts.push(<Product>product.data());
@@ -132,9 +132,10 @@ export class FirebaseService
    */
   loadCoverFile()
   {
-    const db = firebase.firestore();
-    let coverRef = db.collection('images_urls').doc('cover');
-    coverRef.get().then((doc) => {
+    // const db = firebase.firestore();
+    let coverRef = this.db.collection('images_urls').doc('cover');
+    coverRef.get()
+    .subscribe((doc) => {
       if (doc.exists) 
       {
         this.coverPageURL = doc.data().url;
@@ -153,8 +154,8 @@ export class FirebaseService
   {
     this.paymentsImages = [];
 
-    const db = firebase.firestore();
-    db.collection('images_urls').get().then((imagesUrls) => {
+    // const db = firebase.firestore();
+    this.db.collection('images_urls').get().subscribe((imagesUrls) => {
         imagesUrls.forEach((imageUrl) => {
           if(imageUrl.data().name != 'cover')
           {
@@ -174,8 +175,8 @@ export class FirebaseService
     // console.log('Goooooglllleeeee'); 
     // console.log(form);
     // return;
-    const db = firebase.firestore();
-    db.collection('users').doc(form.user.uid).set({
+    // const db = firebase.firestore();
+    this.db.collection('users').doc(form.user.uid).set({
       uid: form.user.uid,
       names: form.additionalUserInfo.profile.given_name,
       surnames: form.additionalUserInfo.profile.family_name,
@@ -198,8 +199,8 @@ export class FirebaseService
    */
   createFacebookUser(form)
   {
-    const db = firebase.firestore();
-    db.collection('users').doc(form.user.uid).set({
+    // const db = firebase.firestore();
+    this.db.collection('users').doc(form.user.uid).set({
       uid: form.user.uid,
       names: form.additionalUserInfo.profile.name,
       surnames: form.additionalUserInfo.profile.last_name,
@@ -222,18 +223,18 @@ export class FirebaseService
    */
   createUser(form: RegisterForm, credentials)
   {
-    const db = firebase.firestore();
-    db.collection('users').doc(credentials.user.uid).set({
+    // const db = firebase.firestore();
+    this.db.collection('users').doc(credentials.user.uid).set({
       uid: credentials.user.uid,
       names: form.names,
       surnames: form.surnames,
       addresses: [
         {
           street: form.street,
-          street_optional: form.street_optional
+          street_optional: form.street_optional,
+          zip: form.zip,
         }
-      ],
-      zip: form.zip,
+      ],      
       email: form.email,
       phone: form.phone
     }).then(() => {
@@ -252,9 +253,9 @@ export class FirebaseService
    */
   async getUserByUid(uid: string)
   {
-    const db = firebase.firestore();
-    db.collection('users').doc(uid).get()
-    .then((user) => {
+    // const db = firebase.firestore();
+    await this.db.collection('users').doc(uid).get()
+    .subscribe((user) => {
       if (user.exists) {
         console.log("Document data:", user.data());
         this.user = <UserAuth>user.data();
@@ -262,8 +263,6 @@ export class FirebaseService
           // doc.data() will be undefined in this case
           console.log("No such document!");
       }
-    }).catch((error) => {
-      console.log("Error getting document:", error);
     });
   }
 
@@ -276,8 +275,8 @@ export class FirebaseService
     if(this.user)
     {
       this.user.addresses.push(form);
-      const db = firebase.firestore();
-      db.collection('users').doc(this.user.uid).set(this.user)
+      // const db = firebase.firestore();
+      this.db.collection('users').doc(this.user.uid).set(this.user)
       .then(() => {
         this.callComponentMethod();
         this.router.navigate(['shopping-cart/addresses']); 
@@ -293,21 +292,40 @@ export class FirebaseService
   /**
    * Obtiene el usuario actualmente autenticado en el sistema.
    */
-  getLoginUser(): Observable<UserAuth>
+  getLoginUser(): UserAuth
   {
-    return of(this.user);
+    return this.user;
   }
 
   /**
    * Registra un pedido en la base de datos de firebase.
    * @param sale 
    */
-  registerSale(sale: Sale)
+  async registerSale(sale: Sale)
   {
     console.log('El pedido que se intenta registrar es:');
     console.log(sale);
-    const db = firebase.firestore();
-    return db.collection('sales').add(sale);
+    // const db = firebase.firestore();
+    return await this.db.collection('sales').add(sale);
+  }
+
+  /**
+   * Termina el registro de los datos para los usuarios autenticados 
+   * con google o con facebook
+   * @param userData 
+   */
+  completeUserData(userData)
+  {
+    // const db = firebase.firestore();
+    this.db.collection('users').doc(userData.uid).set(userData)
+    .then(() => {
+      this.getUserByUid(userData.uid);
+      this.callComponentMethod();
+      this.router.navigate(['shopping-cart']); 
+      return true;
+    }).catch((error) => {
+      console.log(error);
+    });
   }
 
 }

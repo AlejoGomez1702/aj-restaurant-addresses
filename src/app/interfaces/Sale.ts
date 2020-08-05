@@ -16,7 +16,10 @@ export interface Sale
     total: number,
     coupon_code?: string,
 
-    cart_list: CartList[]
+    cart_list: CartList[],
 
-
+    user: {
+        email: string,
+        uid: string
+    }
 }

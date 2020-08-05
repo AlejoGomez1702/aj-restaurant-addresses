@@ -1,12 +1,35 @@
 import { Component } from '@angular/core';
+import { FirebaseService } from '../services/firebase.service';
 
 @Component({
   selector: 'app-tabs',
   templateUrl: 'tabs.page.html',
   styleUrls: ['tabs.page.scss']
 })
-export class TabsPage {
+export class TabsPage 
+{
+  // Indica si hay un usuario logueado o no.
+  public isLogin: boolean;
 
-  constructor() {}
+  constructor(
+    private fbService: FirebaseService
+  ) 
+  {
+  }
+
+  /**
+   * Verifica que haya un usuario logueado en el sistema.
+   */
+  verifyUserAuth()
+  {
+    if(this.fbService.user)
+    {
+      this.isLogin = true;
+    }
+    else
+    {
+      this.isLogin = false;
+    }
+  }
 
 }

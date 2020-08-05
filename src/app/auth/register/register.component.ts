@@ -10,7 +10,7 @@ import { AuthService } from 'src/app/services/auth.service';
 export class RegisterComponent implements OnInit 
 {
   // Listado con los codigos postales(ZIP) válidos para el domicilio del restaurante.
-  private validZips: string[];
+  // private validZips: string[];
 
   // Formulario con los datos de registro.
   public registerForm = new FormGroup({
@@ -35,7 +35,7 @@ export class RegisterComponent implements OnInit
     private authService: AuthService
   ) 
   { 
-    this.validZips = this.authService.supportedZip;
+    // this.validZips = this.authService.supportedZip;
     this.isValidZip = false;
     // this.zipEnter = '';
   }
@@ -50,22 +50,6 @@ export class RegisterComponent implements OnInit
   {
     const enterZip = <string>this.registerForm.controls['zip'].value;
     this.isValidZip = this.authService.validateZipCode(enterZip);
-    // const enterZip = <string>this.registerForm.controls['zip'].value;
-    // // console.log('Enter ZIP: ' + enterZip);
-    // let validation = false;
-
-    // for (const zip of this.validZips) 
-    // {
-    //   if(enterZip == zip)
-    //   {
-    //     this.isValidZip = true;  
-    //     validation = true;
-    //     break;
-    //   }        
-    // }
-
-    // if(validation)
-    //   this.isValidZip = false; 
   }
 
   /**

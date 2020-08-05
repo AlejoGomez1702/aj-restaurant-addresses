@@ -1,19 +1,46 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Tab 3
+      User Information
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 3</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <ion-item>
+    <h2>
+      Names:  
+      <h4>{{ user.names }}</h4>       
+    </h2>
+  </ion-item>
 
-  <h2>{{ user.names }}</h2>
+  <ion-item>
+    <h2>
+      Surnames:  
+      <h4>{{ user.surnames }}</h4>       
+    </h2>
+  </ion-item>
 
-  <app-explore-container name="Tab 3 page"></app-explore-container>
+  <ng-container *ngIf="user.email">
+    <ion-item>
+      <h2>
+        Email:  
+        <h4>{{ user.email }}</h4>       
+      </h2>
+    </ion-item>
+  </ng-container>
+
+  <ng-container *ngIf="user.phone">
+    <ion-item>
+      <h2>
+        Phone:  
+        <h4>{{ user.phone }}</h4>       
+      </h2>
+    </ion-item>
+  </ng-container>
+  <!-- <h2 (click)="logout()">Cerrar sesión</h2> -->
 </ion-content>
+
+<ion-footer>
+  <ion-button (click)="logout()" color="dark" expand="block">Logout</ion-button>
+</ion-footer>
