@@ -1,6 +1,6 @@
 {
   "appId": "io.ionic.starter",
-  "appName": "La Perrada De Chalo",
+  "appName": "aj-restaurant-addresses",
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "www",

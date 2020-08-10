@@ -5,7 +5,6 @@ const functions = require('firebase-functions');
 // const express = require('express');
 const stripe = require('stripe')(functions.config().stripe.secret);
 const nodemailer = require('nodemailer');
-const hbs = require('nodemailer-express-handlebars');
 
 // const app = express();
 
@@ -64,16 +63,48 @@ exports.sendMail = functions.firestore.document('sales/{uid}').onCreate((snapsho
         }
     });    
 
-    transporter.use('compile', hbs({
-        viewEngine: 'express-handlebars',
-        viewPath: './views/'
-    }));
+    // *********MESSAGE*********MESSAGE*********MESSAGE*********MESSAGE*********MESSAGE************//
+    let msj = 'You’ve received the following order from ' + sale.user.names + ' '
+                + sale.user.surnames + '\n';
+
+    const productsList = sale.cart_list; // Listado de los productos 
+
+    for (let i = 0; i < productsList.length; i++) 
+    {
+        const product = productsList[i];
+
+        // if(product.type == 1)
+        // {
+            msj += product.quantity + 'X   ' + product.product.name + ' ===> ' + product.price_total + '\n';
+            // Si el producto tiene observaciones.
+            if(product.options.observations !== '')
+            {
+                msj += 'Observations:  ' + product.options.observations;
+            }
+        // }
+    }
+
+    // for(const product in productsList)
+    // {
+    //     msj += product.quantity + 'X   ' + 'product name' + ' = ' + product.price_total + '\n';
+    //     // if(product.options.observations !== '')
+    //     // {
+    //     //     msj += 'Observations: ' + product.options.observations + '\n';
+    //     // } 
+    // }
+
+    msj += 'Subtotal: ' + sale.subtotal + '\n';
+    msj += 'Tax: ' + sale.tax_total + '\n';
+    msj += 'Total: ' + sale.total + '\n';
+
+    // *********MESSAGE*********MESSAGE*********MESSAGE*********MESSAGE*********MESSAGE************//
 
     var mailOptions = {
         from: 'La Perrada De Chalo',
         to: sale.user.email + ', perradachaloorders@gmail.com',
         subject: '[Prueba APP]Purchase completed successfully',
-        text: 'Acá va toda la información'
+        text: msj,
+        // template: 'index'
     };
 
     transporter.sendMail(mailOptions, (error, info) => {
@@ -82,7 +113,7 @@ exports.sendMail = functions.firestore.document('sales/{uid}').onCreate((snapsho
             res.send(500, err.message);
         } else {
             console.log("Email sent");
-            res.status(200).jsonp(req.body);
+            res.status(200).jsonp({message: 'Email Complete!'});
         }
     });
 

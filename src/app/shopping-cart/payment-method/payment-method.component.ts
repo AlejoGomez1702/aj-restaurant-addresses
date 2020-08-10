@@ -11,6 +11,7 @@ import { FirebaseService } from 'src/app/services/firebase.service';
 import { AlertController } from '@ionic/angular';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { HTTP } from '@ionic-native/http/ngx';
+import { computeStackId } from '@ionic/angular/directives/navigation/stack-utils';
 
 @Component({
   selector: 'app-payment-method',
@@ -84,37 +85,46 @@ export class PaymentMethodComponent implements OnInit
   {
     this.stripe.setPublishableKey(environment.stripeKey);
 
-    const numberCard = this.paymentForm.get('card_number').value;
+    const numberCard: string = this.paymentForm.get('card_number').value;
     const dateData = this.paymentForm.get('expiry_date').value;
-    const correctDate = this.getMonthAndYearCard(dateData);
-    const codeCvc = this.paymentForm.get('card_code').value;
+    // const correctDate = this.getMonthAndYearCard(dateData);
+    const codeCvc: string = this.paymentForm.get('card_code').value;
+
+    const dateInfo = new Date(dateData);
+    // console.log('La fecha en vamos a veeerrr:');
+    // console.log(dateInfo.getFullYear());
+    // console.log(dateInfo.getMonth() + 1);
+
+    const year: number = dateInfo.getFullYear(); 
+    const month: number = dateInfo.getMonth() + 1;
 
     //*************IMPORTANTE*************IMPORTANTE*************IMPORTANTE************* */
     /**
      * Información verdadera del usuario.
      */
-    // this.cardDetails = {
-    //   number: numberCard,
-    //   expMonth: correctDate.month,
-    //   expYear: correctDate.year,
-    //   cvc: codeCvc
-    // };
+    this.cardDetails = {
+      number: numberCard,
+      expMonth: month,
+      expYear: year,
+      cvc: codeCvc
+    };
 
     /**
      * Información para realizar pruebas.
      */
-    this.cardDetails = {
-      number: '4242424242424242',
-      expMonth: 12,
-      expYear: 2020,
-      cvc: '220'
-    };
+    // this.cardDetails = {
+    //   number: '4242424242424242',
+    //   expMonth: 12,
+    //   expYear: 2020,
+    //   cvc: '220'
+    // };
 
     this.stripe.createCardToken(this.cardDetails)
       .then(token => {
         console.log(token);
         // Se multiplica por 100 porque la api de stripe acepta en centavos de dolar.
-        let ammount = (this.shoppingCartService.subtotal + this.shoppingCartService.taxTotal) * 100;
+        let ammount: number = (this.shoppingCartService.subtotal + this.shoppingCartService.taxTotal) * 100;
+        ammount = Math.round((ammount + Number.EPSILON) * 100) / 100; // Devolviendo solo 2 decimales.
         this.makePayment(token.id, ammount)
         .then((data) => {
           console.log(data);
@@ -207,31 +217,31 @@ export class PaymentMethodComponent implements OnInit
    * Parsea la informacion del ion-datetime en un objeto entendible.
    * @param date 
    */
-  getMonthAndYearCard(date: string): {month: number, year: number}
-  {
-    console.log('EL año que me llega es: ');
-    console.log(date);
-    let month = '';
-    let year = '';
+  // getMonthAndYearCard(date: string): {month: number, year: number}
+  // {
+  //   console.log('EL año que me llega es: ');
+  //   console.log(date);
+  //   let month = '';
+  //   let year = '';
 
-    for (let i = 0; i < date.length; i++) {
-      const element = date.charAt[i];
-      if(i < 4)
-      {
-        year += date.charAt[i];
-      }else if(i < 7 && i != 4)
-      {
-        month += date.charAt[i];        
-      }else{
-        break;
-      }      
-    }
+  //   for (let i = 0; i < date.length; i++) {
+  //     const element = date.charAt[i];
+  //     if(i < 4)
+  //     {
+  //       year += date.charAt[i];
+  //     }else if(i < 7 && i != 4)
+  //     {
+  //       month += date.charAt[i];        
+  //     }else{
+  //       break;
+  //     }      
+  //   }
 
-    let expireMonth: number = +month;
-    let expireYear: number = +year;
+  //   let expireMonth: number = +month;
+  //   let expireYear: number = +year;
 
-    return {month: expireMonth, year: expireYear};
-  }
+  //   return {month: expireMonth, year: expireYear};
+  // }
 
 
   showInfo()
