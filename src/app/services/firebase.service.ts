@@ -314,6 +314,15 @@ export class FirebaseService
   }
 
   /**
+   * Registra un intento de pago de stripe en la base de datos
+   * @param payment 
+   */
+  async registerPayment(payment)
+  {
+    return await this.db.collection('payments').add(payment);
+  }
+
+  /**
    * Termina el registro de los datos para los usuarios autenticados 
    * con google o con facebook
    * @param userData 

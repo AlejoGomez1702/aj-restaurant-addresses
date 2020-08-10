@@ -13,6 +13,7 @@ import { AppComponent } from './app.component';
 
 // HTTP
 import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { HTTP } from '@ionic-native/http/ngx';
 
 // Firebase
 import {FirebaseUIModule, firebase, firebaseui} from 'firebaseui-angular';
@@ -76,6 +77,7 @@ const firebaseUiAuthConfig: firebaseui.auth.Config = {
     StatusBar,
     SplashScreen,
     Stripe,
+    HTTP,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

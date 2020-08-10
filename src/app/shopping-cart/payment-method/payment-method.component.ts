@@ -9,7 +9,8 @@ import { environment } from 'src/environments/environment';
 import { ShoppingCartService } from 'src/app/services/shopping-cart.service';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { AlertController } from '@ionic/angular';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HTTP } from '@ionic-native/http/ngx';
 
 @Component({
   selector: 'app-payment-method',
@@ -50,6 +51,7 @@ export class PaymentMethodComponent implements OnInit
 
   constructor(
     private http: HttpClient,
+    private nativeHttp: HTTP,
     private authService: AuthService,
     private shoppingCartService: ShoppingCartService,
     private firebaseService: FirebaseService,
@@ -66,7 +68,7 @@ export class PaymentMethodComponent implements OnInit
     //                                                                                       ||
     //                                                                                       \/
     this.acceptCard = (this.shoppingCartService.subtotal + this.shoppingCartService.taxTotal) >  
-                            (this.firebaseService.generalInformation.minimum_with_card)
+                            (this.firebaseService.generalInformation.minimum_with_card);
   }
 
   ngOnInit() 
@@ -86,13 +88,6 @@ export class PaymentMethodComponent implements OnInit
     const dateData = this.paymentForm.get('expiry_date').value;
     const correctDate = this.getMonthAndYearCard(dateData);
     const codeCvc = this.paymentForm.get('card_code').value;
-
-    console.log('Number card');
-    console.log(numberCard);
-    console.log('Date Data');
-    console.log(correctDate);
-    console.log('Codigo CVC');
-    console.log(codeCvc);
 
     //*************IMPORTANTE*************IMPORTANTE*************IMPORTANTE************* */
     /**
@@ -118,13 +113,20 @@ export class PaymentMethodComponent implements OnInit
     this.stripe.createCardToken(this.cardDetails)
       .then(token => {
         console.log(token);
-        let ammount = this.shoppingCartService.subtotal + this.shoppingCartService.taxTotal;
+        // Se multiplica por 100 porque la api de stripe acepta en centavos de dolar.
+        let ammount = (this.shoppingCartService.subtotal + this.shoppingCartService.taxTotal) * 100;
         this.makePayment(token.id, ammount)
-        .subscribe((data) => {
+        .then((data) => {
           console.log(data);
-          this.shoppingCartService.refreshCart();
-          this.presentSaleSuccesfull(); 
-          this.router.navigate(['tabs/tab1']); 
+          // this.shoppingCartService.refreshCart();  *********SOLUCIONAR*********
+          this.shoppingCartService.registerSale()
+          .then(() => {
+            // this.shoppingCartService.refreshCart();    // ***********solucionar
+            this.presentSaleSuccesfull(); 
+            this.router.navigate(['tabs/tab1']);   
+          }).catch((error) => {
+            console.log(error);
+          });
         });
       })
       .catch(error => {
@@ -139,14 +141,14 @@ export class PaymentMethodComponent implements OnInit
    * @param token 
    * @param ammount
    */
-  makePayment(token, ammount: number) 
+  makePayment(token, amount: number) 
   {
-    console.log('MakePayment ===> Voy a llamar por post.');
-    return this.http.post('https://us-central1-crud-ionic-c3d18.cloudfunctions.net/payWithStripe', {
-      amount: ammount,
-      currency: "usd",
-      token: token.id
-    });
+    let paymentInformation = {
+      amount: amount,
+      user: this.firebaseService.user,
+    };
+
+    return this.firebaseService.registerPayment(paymentInformation);
   }
 
   /**

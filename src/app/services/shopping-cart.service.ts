@@ -188,28 +188,25 @@ export class ShoppingCartService
    */
   async registerSale()
   {
-    this.authService.getCurrentUser().then((user) => {
-      // Junto toda la información para que firebase me cree el nuevo pedido.
-      const sale: Sale = {
-        sale_information: this.saleInformation,
-        coupon_code: this.couponCode,
-        subtotal: this.subtotal,
-        tax_total: this.taxTotal,
-        total: this.subtotal + this.taxTotal,
-        cart_list: this.cartList,
-        user: {
-          email: user.email,
-          uid: user.uid
-        }
-      };
-      console.log('El pedidoooooo essssssssssss: ');
-      console.log(sale);
+    // this.authService.getCurrentUser().then((user) => {
+    // Junto toda la información para que firebase me cree el nuevo pedido.
+    const sale: Sale = {
+      sale_information: this.saleInformation,
+      coupon_code: this.couponCode,
+      subtotal: this.subtotal,
+      tax_total: this.taxTotal,
+      total: this.subtotal + this.taxTotal,
+      cart_list: this.cartList,
+      user: this.fbService.user
+    };
+    console.log('El pedidoooooo essssssssssss: ');
+    console.log(sale);
 
-      return this.fbService.registerSale(sale); //*****************LLAMAAARRRRRR************ */
+    return this.fbService.registerSale(sale); //*****************LLAMAAARRRRRR************ */
 
-    }).catch((error) => {
-      console.log(error);
-    });
+    // }).catch((error) => {
+    //   console.log(error);
+    // });
   }
 
   /**

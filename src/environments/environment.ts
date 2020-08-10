@@ -15,10 +15,9 @@ export const environment = {
     appId: "1:1000022577707:web:206066f766706a84afd06e"
   },
 
-  stripeKey: 'pk_test_51HARV0Hs87mAT1nlqSvQBtOtlYbTHlnRpS6wnwG8EZ1eVwcLq2AM674OBPxgwzQKR1Y6P5bYBjAPqQvyJeC9YtqA002oMc8jQ4',
+  stripeKey: 'pk_test_10V4EOZvv157iYvHC8wDWWzP00XfoXdFil',
 
-  storageUrl: "gs://crud-ionic-c3d18.appspot.com"
-
+  stripeUrl: 'https://us-central1-crud-ionic-c3d18.cloudfunctions.net/payWithStripe'
 };
 
 /*
