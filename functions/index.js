@@ -5,6 +5,7 @@ const functions = require('firebase-functions');
 // const express = require('express');
 const stripe = require('stripe')(functions.config().stripe.secret);
 const nodemailer = require('nodemailer');
+const hbs = require('nodemailer-express-handlebars');
 
 // const app = express();
 
@@ -62,6 +63,11 @@ exports.sendMail = functions.firestore.document('sales/{uid}').onCreate((snapsho
             pass: process.env.PASSWORD
         }
     });    
+
+    transporter.use('compile', hbs({
+        viewEngine: 'express-handlebars',
+        viewPath: './views/'
+    }));
 
     var mailOptions = {
         from: 'La Perrada De Chalo',
