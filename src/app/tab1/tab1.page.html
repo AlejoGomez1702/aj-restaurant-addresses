@@ -1,5 +1,5 @@
 <!-- Cabecera inicial con la info del restaurante -->
-<ion-header [translucent]="true" color="dark" *ngIf="firstHeader"> 
+<ion-header color="dark" *ngIf="firstHeader"> 
   <!-- Nombre del restaurante y boton de información -->
   <ion-toolbar color="dark">
     <ion-buttons slot="primary">
@@ -13,9 +13,9 @@
 </ion-header>
 
 <!-- Cabecera con el listado de categorias de productos disponibles -->
-<ion-header [translucent]="true" color="dark" *ngIf="!firstHeader">
+<ion-header color="dark" *ngIf="!firstHeader">
   <ion-toolbar color="dark">    
-    <ion-segment scrollable (ionChange)="segmentChanged($event)" [value]="category">
+    <ion-segment scrollable [value]="category">
       <!-- Menu -->
       <ng-container *ngFor="let product of products">
         <ion-segment-button value="{{ product.category }}" (click)="scrollToCategory($event, product.category)">
@@ -32,14 +32,15 @@
   <div class="cover-container">
     <ion-img [src]="coverPageURL"></ion-img>
     <ion-text class="cover-left-text">
-      <h1>{{ generalInformation.restaurant_name }}</h1>
-      <h5>Pickup {{ generalInformation.pik_time }} min | Domicile {{ generalInformation.domicile_time }} min | With Card ${{ generalInformation.minimum_with_card }}</h5>
+      <!-- <h1>{{ generalInformation.restaurant_name }}</h1> -->
+      <h5>Pickup {{ generalInformation.pik_time }} min | Domicile {{ generalInformation.domicile_time }} min</h5>
+      <h5>Minimum Card Payment ${{ generalInformation.minimum_with_card }}</h5>
     </ion-text>
   </div>
 
   <!-- Barra de busqueda  -->
   <ion-toolbar>
-    <ion-searchbar name="filterList" placeholder="Buscar productos..." [(ngModel)]="filterList"></ion-searchbar>
+    <ion-searchbar name="filterList" placeholder="Search products..." [(ngModel)]="filterList"></ion-searchbar>
   </ion-toolbar>
 
    <!-- List of Text Items -->
@@ -87,7 +88,5 @@
         </ion-fab-button>
       </ion-fab>
     </ng-container>
-
-
 
 </ion-content>

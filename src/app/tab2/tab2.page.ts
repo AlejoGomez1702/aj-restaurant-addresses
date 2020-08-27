@@ -11,7 +11,7 @@ import { AuthService } from '../services/auth.service';
 })
 export class Tab2Page 
 {
-  public images: string[][];
+  public images: string[];
 
   public sliderOptions = {
     zoom: false,

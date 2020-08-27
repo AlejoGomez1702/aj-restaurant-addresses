@@ -88,9 +88,8 @@ export class ProductComponent implements OnInit
   //                || 
   //                \/           
   /**
-   * Lógica cuando un producto no tiene opciones.
+   * Calcula el total a pagar según las opciones del producto.
    * @param type 
-   * @param isPlus Sumar o restar
    */
   processProduct(type: number)
   {
@@ -287,8 +286,6 @@ export class ProductComponent implements OnInit
 
   verifySizeSelected(input: string): boolean
   {
-    // if(this.options.size) return true;    
-
     if(input != '')
     {
       for(const size of this.product.size) 
@@ -296,9 +293,6 @@ export class ProductComponent implements OnInit
         if(input == size.name)
         {
           this.options.size = size;
-          // this.isFull = true;
-          // console.log('sizeeeeee');
-          // console.log(size);
           return true;
         }
       }
@@ -309,8 +303,6 @@ export class ProductComponent implements OnInit
 
   verifyOptionSelected(input: string): boolean
   {
-    // if(this.options.option) return true;   
-
     if(input != '')
     {
       for(const option of this.product.options) 

@@ -26,8 +26,6 @@ export class TabsPage
    */
   verifyUserAuth()
   {
-    console.log('Pequeña pruebitaaa');
-    console.log(this.fbService.user); 
     if(this.fbService.user != null)
     {
       this.isLogin = false;

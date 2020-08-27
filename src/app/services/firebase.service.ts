@@ -90,7 +90,7 @@ export class FirebaseService
     this.db.collection('general_information').doc('general_information').get()
     .subscribe((information) => {
       if (information.exists) {
-        console.log("General Information:", information.data());
+        // console.log("General Information:", information.data());
         this.generalInformation = <GeneralInformation>information.data();
       } else {
           // doc.data() will be undefined in this case
@@ -188,11 +188,11 @@ export class FirebaseService
       phone: form.user.phoneNumber
     }).then(() => {
       this.router.navigate(['/shopping-cart']);
-      console.log('Se creo en la base de datos el usuario');
+      // console.log('Se creo en la base de datos el usuario');
       // console.log(form);
     }).catch((error) => {
       this.router.navigate(['/auth']);
-      console.log('NOOOO SE PUDO CREAR EN LA BASE DE DATOS');
+      // console.log('NOOOO SE PUDO CREAR EN LA BASE DE DATOS');
     });
   }
 
@@ -212,7 +212,7 @@ export class FirebaseService
       phone: form.user.phoneNumber
     }).then(() => {
       this.router.navigate(['/shopping-cart']);
-      console.log('Se creo en la base de datos el usuario');
+      // console.log('Se creo en la base de datos el usuario');
       // console.log(form);
     }).catch((error) => {
       this.router.navigate(['/auth']);
@@ -242,7 +242,7 @@ export class FirebaseService
       phone: form.phone
     }).then(() => {
       this.router.navigate(['/shopping-cart']);
-      console.log('Se creo en la base de datos el usuario');
+      // console.log('Se creo en la base de datos el usuario');
       // console.log(form);
     }).catch((error) => {
       this.router.navigate(['/auth']);
@@ -260,7 +260,7 @@ export class FirebaseService
     await this.db.collection('users').doc(uid).get()
     .subscribe((user) => {
       if (user.exists) {
-        console.log("Document data:", user.data());
+        // console.log("Document data:", user.data());
         this.user = <UserAuth>user.data();
         this.updateUserAuthState();
       } else {
@@ -307,8 +307,8 @@ export class FirebaseService
    */
   async registerSale(sale: Sale)
   {
-    console.log('El pedido que se intenta registrar es:');
-    console.log(sale);
+    // console.log('El pedido que se intenta registrar es:');
+    // console.log(sale);
     // const db = firebase.firestore();
     return await this.db.collection('sales').add(sale);
   }

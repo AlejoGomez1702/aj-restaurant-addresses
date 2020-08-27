@@ -199,8 +199,8 @@ export class ShoppingCartService
       cart_list: this.cartList,
       user: this.fbService.user
     };
-    console.log('El pedidoooooo essssssssssss: ');
-    console.log(sale);
+    // console.log('El pedidoooooo essssssssssss: ');
+    // console.log(sale);
 
     return this.fbService.registerSale(sale); //*****************LLAMAAARRRRRR************ */
 

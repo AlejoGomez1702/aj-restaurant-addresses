@@ -30,9 +30,6 @@ export class Tab1Page implements OnInit
   // Información general sobre el restaurante.
   public generalInformation: GeneralInformation;
 
-  // Conteo de productos agregados al carrito
-  // public productCount: number;
-
   constructor
   (
     private router: Router,
@@ -42,12 +39,6 @@ export class Tab1Page implements OnInit
   ) 
   {
     this.firstHeader = true;  
-    // this.generalInformation = {
-    //   domicile_time: '',
-    //   minimum_with_card: 0,
-    //   pik_time: '',
-    //   restaurant_name: ''
-    // };
     this.initInformation();
   }
 
@@ -64,9 +55,6 @@ export class Tab1Page implements OnInit
     this.coverPageURL = this.firebaseService.coverPageURL;
     this.products = this.firebaseService.products;  
     this.generalInformation = this.firebaseService.generalInformation;
-    // this.productCount = this.shoppingCartService.sizeOfCart();  
-
-    // console.log('product count ' + this.productCount);
   }
 
   /**
@@ -75,7 +63,6 @@ export class Tab1Page implements OnInit
    */
   addToCart(productInfo: Product)
   {
-    // console.log(productInfo);
     this.shoppingCartService.addProductToCart(productInfo);
   }
 
@@ -104,7 +91,7 @@ export class Tab1Page implements OnInit
    */
   segmentChanged($event:Event)
   {
-    console.log('jajajja');
+    // console.log('jajajja');
   }
 
   /**
@@ -131,9 +118,6 @@ export class Tab1Page implements OnInit
   {
     let scrollTo = document.getElementById(category);
     scrollTo.scrollIntoView();
-
-    // let toolbarScrollTo = document.getElementById(this.category + '_ID');
-    // toolbarScrollTo.scrollIntoView();
   }
 
   /**
@@ -144,50 +128,14 @@ export class Tab1Page implements OnInit
     for (let i = 0; i < this.products.length; i++) 
     {
       let section = this.products[i];
-
       let category = section.category;
       let topPx = document.getElementById(category).offsetTop;   
-      
-      // console.log('SCROLL====> El valor del scroll => ' + valueScroll);
-      // console.log('TOPTOP====> El valor de topPx => ' + topPx);
-      // console.log('La longitud de pr');
 
       if(valueScroll >= topPx)
       {
         this.category = this.products[i].category;
-        //console.log('los pixeles que me saca son: ' + category + "  " + topPx);
-        // return;
       }    
-      // else
-      // {
-      //   // this.category = this.products[i+1].category;
-      //   //console.log('ahora me saca es: ' + category + " " + topPx);
-      // }
     }
-
-
-
-    // for (let section of this.products) 
-    // {
-    //   let category = section.category;
-    //   let topPx = document.getElementById(category).offsetTop;   
-      
-    //   console.log('El valor del scroll => ' + valueScroll);
-    //   console.log('El valor de topPx => ' + topPx);
-
-    //   if(valueScroll >= topPx)
-    //   {
-    //     this.category = category;
-    //     console.log('los pixeles que me saca son: ' + category + "  " + topPx);
-    //     // return;
-    //   }    
-    //   else
-    //   {
-    //     console.log('ahora me saca es: ' + category + " " + topPx);
-    //   }
-
-    //   break;
-    // }
   }
 
 

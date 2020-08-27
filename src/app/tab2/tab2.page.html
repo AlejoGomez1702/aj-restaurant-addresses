@@ -1,4 +1,4 @@
-<ion-header [translucent]="true" [translucent]="true" color="dark">
+<ion-header [translucent]="false" color="dark">
   <ion-toolbar color="dark">
     <ion-title>
       La Perrada De Chalo
@@ -7,28 +7,13 @@
 </ion-header>
 
 <ion-content padding>
-  <ion-slides [options]="sliderOptions">
-    <ion-slide *ngFor="let img of images[0]">
-      <img src="{{img}}" tappable (click)="openPreview(img)">
-    </ion-slide>
-  </ion-slides>
 
-  <ion-slides [options]="sliderOptions">
-    <ion-slide *ngFor="let img of images[1]">
-      <img src="{{img}}" tappable (click)="openPreview(img)">
-    </ion-slide>
-  </ion-slides>
-
-  <ion-slides [options]="sliderOptions">
-    <ion-slide *ngFor="let img of images[2]">
-      <img src="{{img}}" tappable (click)="openPreview(img)">
-    </ion-slide>
-  </ion-slides>
-
-  <ion-slides [options]="sliderOptions">
-    <ion-slide *ngFor="let img of images[3]">
-      <img src="{{img}}" tappable (click)="openPreview(img)">
-    </ion-slide>
-  </ion-slides>
+  <ng-container *ngFor="let img of images">
+    <ion-slides [options]="sliderOptions">
+      <ion-slide>
+        <img src="{{img}}" tappable (click)="openPreview(img)">
+      </ion-slide>
+    </ion-slides>
+  </ng-container>
 
 </ion-content>

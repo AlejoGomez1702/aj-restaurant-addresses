@@ -1,14 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FirebaseService } from '../../services/firebase.service'; 
-import { Image } from '../../interfaces/Image';
 
 @Component({
   selector: 'app-information',
   templateUrl: './information.component.html',
   styleUrls: ['./information.component.scss'],
 })
-export class InformationComponent implements OnInit 
+export class InformationComponent
 {
   // Imagenes de los medios de pago disponibles.
   public paymentsImages: string[];
@@ -20,11 +19,6 @@ export class InformationComponent implements OnInit
   {
     this.paymentsImages = this.storageFirebase.paymentsImages;
     console.log(this.storageFirebase.paymentsImages);
-  }
-
-  ngOnInit() 
-  {
-    
   }
 
   /**
