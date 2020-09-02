@@ -1,21 +1,21 @@
-<ion-header [translucent]="true" color="dark">
-  <ion-toolbar color="dark">
+<ion-header color="yellow-perrada">
+  <ion-toolbar color="yellow-perrada">
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
-    <ion-title>Select Your Address</ion-title>
+    <ion-title color="white">Select Your Address</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content class="bg-red-perrada">
   <ion-header>
     <h2 class="ion-text-center title">Where do we take the order?</h2>
   </ion-header>
 
   <ion-list>
     <ion-item> 
-      <ion-label>Pickup</ion-label>
-      <ion-toggle [(ngModel)]="pickup"></ion-toggle>
+      <ion-label color="white">Pickup</ion-label>
+      <ion-toggle color="yellow-perrada" [(ngModel)]="pickup"></ion-toggle>
     </ion-item>
   </ion-list>
 
@@ -28,11 +28,11 @@
     <ion-list>
       <ng-container *ngFor="let address of user.addresses; index as i">
         <ion-item (click)="verifyAddress(i)"> 
-          <ion-label>{{ address.street }}</ion-label>
+          <ion-label color="white">{{ address.street }}</ion-label>
           <ng-container *ngIf="address.street_optional">
-            <ion-label class="description-color">{{ address.street_optional }}</ion-label>
+            <ion-label color="white" class="description-color">{{ address.street_optional }}</ion-label>
           </ng-container>
-          <ion-toggle [ngModel]="addresses[i]"></ion-toggle>
+          <ion-toggle color="yellow-perrada" [ngModel]="addresses[i]"></ion-toggle>
         </ion-item>
       </ng-container>
     </ion-list>
@@ -49,8 +49,8 @@
 
 <!-- Footer -->
 <!-- Se deshabilita cuando ==> (pikup = False) y (address = False) -->
-<ion-footer>
-  <ion-button expand="block" color="danger" [disabled]="!isAddressSelected && !pickup" (click)="procesAddress()">
+<ion-footer color="red-perrada">
+  <ion-button expand="block" color="yellow-perrada" [disabled]="!isAddressSelected && !pickup" (click)="procesAddress()">
     Continue
   </ion-button>
 </ion-footer>

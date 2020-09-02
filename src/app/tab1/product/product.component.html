@@ -1,14 +1,14 @@
-<ion-header [translucent]="true" color="dark">
-  <ion-toolbar color="dark">
+<ion-header color="yellow-perrada">
+  <ion-toolbar color="yellow-perrada">
     <ion-buttons slot="start">
       <ion-back-button (click)="goBack()">          
       </ion-back-button>
     </ion-buttons>
-    <ion-title>Product Details</ion-title>
+    <ion-title color="white">Product Details</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content class="bg-red-perrada">
   <!-- products description -->
   <div class="small-margin">
     <ion-grid>
@@ -45,7 +45,7 @@
         </ion-list-header>
       
         <ion-item>
-          <ion-label>Drink</ion-label>
+          <ion-label color="white">Drink</ion-label>
           <ion-select placeholder="Select One" (ionChange)="getOptionSelected($event)">
             <ng-container *ngFor="let option of product.options">
               <ion-select-option value="{{ option.name }}">{{ option.name }}</ion-select-option>
@@ -66,7 +66,7 @@
         </ion-list-header>
       
         <ion-item>
-          <ion-label>Size</ion-label>
+          <ion-label color="white">Size</ion-label>
           <ion-select placeholder="Select One" (ionChange)="getSizeSelected($event)">
             <ng-container *ngFor="let size of product.size">
               <ion-select-option value="{{ size.name }}">{{ size.name }}</ion-select-option>
@@ -103,8 +103,8 @@
   <div class="small-margin">
     <ion-grid>
       <ion-row>
-        <ion-icon name="receipt-outline"></ion-icon>
-        <ion-label>Observations</ion-label>
+        <ion-icon color="yellow-perrada" name="receipt-outline"></ion-icon>
+        <ion-label color="white">Observations</ion-label>
       </ion-row>
 
       <!-- Input field  -->
@@ -118,13 +118,13 @@
 </ion-content>
 
 <!-- Cantidad del producto y boton de agregar -->
-<ion-footer>
-  <ion-toolbar>
+<ion-footer color="red-perrada">
+  <ion-toolbar color="red-perrada">
     <ion-grid>
       <ion-row>
         <!-- Cantidad de producto -->
         <ion-col>
-          <ion-button expand="block" color="ligth">
+          <ion-button expand="block" color="white">
             <ion-chip color="ligth">
               <ion-icon color="danger" name="remove-circle-outline" (click)="plusQuantity(false)"></ion-icon>
               <ion-label color="dark">{{ productQuantity }}</ion-label>
@@ -132,8 +132,9 @@
             </ion-chip>
           </ion-button>
         </ion-col>
+        <!-- Add Product -->
         <ion-col>
-          <ion-button [disabled]="!isFull" color="danger" expand="block" (click)="addToShoppingCart()">Add      $ {{ total  | number : '1.2-2' }}</ion-button>
+          <ion-button class="btn-add" [disabled]="!isFull" color="yellow-perrada" expand="block" (click)="addToShoppingCart()">Add      $ {{ total  | number : '1.2-2' }}</ion-button>
         </ion-col>
       </ion-row>
     </ion-grid>

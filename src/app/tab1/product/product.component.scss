@@ -7,3 +7,31 @@
 {
     background-color: #e0e0e0;
 }
+
+h1, h2, h3
+{
+    color: #ffffff;
+}
+
+ion-select 
+{
+    /* Applies to the value and placeholder color */
+    color: #ffffff;
+  
+    /* Set a different placeholder color */
+    --placeholder-color: #ffc01d;
+  
+    /* Set full opacity on the placeholder */
+    --placeholder-opacity: 1;
+}
+
+ion-textarea
+{
+    --placeholder-color: #ffc01d;
+    color: #ffffff;
+}
+
+.btn-add
+{
+    color: #ffffff;
+}

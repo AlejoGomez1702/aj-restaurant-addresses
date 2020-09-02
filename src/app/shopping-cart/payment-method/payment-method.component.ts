@@ -190,7 +190,6 @@ export class PaymentMethodComponent implements OnInit
       cssClass: 'my-custom-class',
       header: 'Congratulations!',
       message: 'your order has been completed',
-
     });
 
     await alert.present();

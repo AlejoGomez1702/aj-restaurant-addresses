@@ -1,14 +1,14 @@
-<ion-header [translucent]="true" color="dark">
-  <ion-toolbar color="dark">
+<ion-header color="yellow-perrada">
+  <ion-toolbar color="yellow-perrada">
     <ion-buttons slot="start">
       <ion-back-button (click)="goBack()">          
       </ion-back-button>
     </ion-buttons>
-    <ion-title>Shopping Cart</ion-title>
+    <ion-title color="white">Shopping Cart</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content class="bg-red-perrada">
   <ion-header>
     <h2 class="ion-text-center title">My Order</h2>
   </ion-header>
@@ -31,17 +31,17 @@
 
   <!-- Si el carrito de compras esta vacio -->
   <ng-container *ngIf="isEmpty">
-    <ion-toolbar color="danger">
+    <ion-toolbar color="yellow-perrada">
       <ion-icon name="cart-outline" slot="start" size="large"></ion-icon>
-      <ion-title>The shopping cart is empty</ion-title>
+      <ion-title color="white">The shopping cart is empty</ion-title>
     </ion-toolbar>
   </ng-container>
 
   <!-- Si los productos no cumplen con el pedido minimo para pagar con tarjeta -->
   <ng-container *ngIf="!meetsMinimum">
-    <ion-toolbar color="primary">
+    <ion-toolbar color="yellow-perrada">
       <ion-icon name="card-outline" slot="start" size="large"></ion-icon>
-      <ion-label>The minimum payment by card is: ${{ minimumOrderWithCard }}</ion-label>
+      <ion-label color="white">The minimum payment by card is: ${{ minimumOrderWithCard }}</ion-label>
     </ion-toolbar>
   </ng-container>
 
@@ -91,8 +91,8 @@
 </ion-content>
 
 <!-- Footer -->
-<ion-footer>
-  <ion-button [disabled]="isEmpty" expand="block" color="danger" (click)="goToAuthUser(false)">
+<ion-footer color="red-perrada">
+  <ion-button [disabled]="isEmpty" expand="full" color="yellow-perrada" (click)="goToAuthUser(false)">
     Continue
   </ion-button>
 </ion-footer>

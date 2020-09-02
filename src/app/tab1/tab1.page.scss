@@ -6,14 +6,50 @@
 
 .cover-left-text
 {
-    color: #ffffff;
+    color: #ffc01d;
+    text-shadow: 0 0 3px #000000, 0 0 5px #000000; 
     position: absolute;
     bottom: 8px;
     text-align: center;
-    left: 18%;
+    left: 17%;
 }
 
 .mt-products
 {
     margin-top: 10px;
+}
+
+// .color-content
+// {
+//     background-color: #df2c31;
+// }
+
+// ion-content 
+// {
+//     --background: url('../../assets/img/background.png') no-repeat 100% 100%;
+
+//     ion-item
+//     {
+//         --background: url('../../assets/img/background.png') no-repeat 100% 100%;
+//     }    
+// }
+
+// ion-item
+// {
+//     --border-color: #ffffff;
+//     // --border-style: solid;
+//     // --border-width: 3px;
+
+// }
+
+.color-white
+{
+    color: #ffffff;
+}
+
+ion-item
+{
+    --border-color: #ffffff;
+    // --border-style: solid;
+    // --border-width: 3px;
 }

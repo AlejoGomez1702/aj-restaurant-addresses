@@ -1,15 +1,14 @@
-<ion-header [translucent]="false" color="dark">
-  <ion-toolbar color="dark">
-    <ion-title>
+<ion-header color="yellow-perrada">
+  <ion-toolbar color="yellow-perrada">
+    <ion-title color="white">
       La Perrada De Chalo
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
-
+<ion-content class="bg-red-perrada">
   <ng-container *ngFor="let img of images">
-    <ion-slides [options]="sliderOptions">
+    <ion-slides [options]="sliderOptions" style="margin-top: -15px;">
       <ion-slide>
         <img src="{{img}}" tappable (click)="openPreview(img)">
       </ion-slide>
