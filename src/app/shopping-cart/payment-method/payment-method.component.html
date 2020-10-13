@@ -14,21 +14,23 @@
 
   <div class="small-margin">
 
+    <!-- Pago con tarjeta (Stripe) -->
     <ng-container *ngIf="acceptCard">
       <ion-list>
         <ion-item>
           <ion-label color="white">Credit Card (Stripe)</ion-label>
-          <ion-toggle color="yellow-perrada" [(ngModel)]="card"></ion-toggle>
+          <ion-toggle color="yellow-perrada" [(ngModel)]="card" disabled></ion-toggle>
         </ion-item>
       </ion-list>
     </ng-container>
 
-    <ion-list>
+    <!-- Pago en efectivo cuando llegue el domicilio -->
+    <!-- <ion-list>
       <ion-item>
         <ion-label color="white">Payment When Delivery Is Made</ion-label>
         <ion-toggle color="yellow-perrada" [(ngModel)]="cash"></ion-toggle>
       </ion-item>
-    </ion-list>
+    </ion-list> -->
   </div>
 
   <!-- Opciones para el pago con tarjeta -->

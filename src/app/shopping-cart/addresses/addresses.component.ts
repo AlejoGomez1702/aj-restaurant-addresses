@@ -128,8 +128,8 @@ export class AddressesComponent implements OnInit
       this.shoppingCartService.saleInformation = {pikup: false, address: address};
     }
 
-    console.log('Información de la dirección: ');
-    console.log(this.shoppingCartService.saleInformation);
+    // console.log('Información de la dirección: ');
+    // console.log(this.shoppingCartService.saleInformation);
 
     this.goToPaymentUrl();
   }

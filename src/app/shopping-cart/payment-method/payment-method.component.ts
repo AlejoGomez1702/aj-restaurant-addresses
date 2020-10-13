@@ -11,7 +11,6 @@ import { FirebaseService } from 'src/app/services/firebase.service';
 import { AlertController } from '@ionic/angular';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { HTTP } from '@ionic-native/http/ngx';
-import { computeStackId } from '@ionic/angular/directives/navigation/stack-utils';
 
 @Component({
   selector: 'app-payment-method',
@@ -62,20 +61,30 @@ export class PaymentMethodComponent implements OnInit
   ) 
   { 
     this.isCorrectAmmount = false;
-    this.card = false;
+    this.card = true;
     this.cash = false;
+    this.validateMinumum();
+  }
+
+  ngOnInit() 
+  {
+    this.validateMinumum();
+  }
+
+  validateMinumum()
+  {
     //         Si el dinero total del carrito (Subtotal + Tax) es mayor que...               ||
     //            ...el dinero minímo aceptado por el restaurante                            ||
     //                                                                                       ||
     //                                                                                       \/
     this.acceptCard = (this.shoppingCartService.subtotal + this.shoppingCartService.taxTotal) >  
                             (this.firebaseService.generalInformation.minimum_with_card);
-  }
 
-  ngOnInit() 
-  {
-    console.log('*********Lo que hay en el carrito de compras es:');
-    console.log(this.shoppingCartService.cartList);
+    if(!this.acceptCard)
+    {
+      this.presentAlertMinimumPayment();
+      this.router.navigate(['shopping-cart']);
+    }
   }
 
   /**
@@ -196,6 +205,22 @@ export class PaymentMethodComponent implements OnInit
   }
 
   /**
+   * Dialogo de compra realizada satisfactoriamente.
+   */
+  async presentAlertMinimumPayment() 
+  {
+    // console.log('El producto a eliminar es: ');
+    // console.log(this.cartList[index]);
+    const alert = await this.alertController.create({
+      cssClass: 'my-custom-class',
+      header: 'OH! OH!',
+      message: 'You do not reach the minimum purchase required by the restaurant',
+    });
+
+    await alert.present();
+  }
+
+  /**
    * Verifica que el monto introducido actualmente por el usuario 
    * sea mayor que el valor del pedido.
    */
@@ -212,48 +237,9 @@ export class PaymentMethodComponent implements OnInit
     }
   }
 
-  /**
-   * Parsea la informacion del ion-datetime en un objeto entendible.
-   * @param date 
-   */
-  // getMonthAndYearCard(date: string): {month: number, year: number}
+  // showInfo()
   // {
-  //   console.log('EL año que me llega es: ');
-  //   console.log(date);
-  //   let month = '';
-  //   let year = '';
-
-  //   for (let i = 0; i < date.length; i++) {
-  //     const element = date.charAt[i];
-  //     if(i < 4)
-  //     {
-  //       year += date.charAt[i];
-  //     }else if(i < 7 && i != 4)
-  //     {
-  //       month += date.charAt[i];        
-  //     }else{
-  //       break;
-  //     }      
-  //   }
-
-  //   let expireMonth: number = +month;
-  //   let expireYear: number = +year;
-
-  //   return {month: expireMonth, year: expireYear};
+  //   console.log('Card ' + this.card);
+  //   console.log('Cash ' + this.cash);
   // }
-
-
-  showInfo()
-  {
-    console.log('Card ' + this.card);
-    console.log('Cash ' + this.cash);
-  }
-
-  salir()
-  {
-    this.authService.logout().then((yes) => {
-      this.router.navigate(['shopping-cart']);
-    });
-  }
-
 }
