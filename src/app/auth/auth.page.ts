@@ -73,6 +73,7 @@ export class AuthPage implements OnInit
    */
   openAppleSignIn() {
     signInWithApple.Authorize().then(async res => {
+      alert(res);
       if (res.response && res.response.identityToken) {
         this.authService.loginWithApple(res.response);
       } else {
