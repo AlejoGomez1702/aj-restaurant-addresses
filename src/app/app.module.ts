@@ -25,6 +25,8 @@ import { CardNumberPipe } from './pipes/card-number.pipe';
 import { Stripe } from '@ionic-native/stripe/ngx';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 
+import { SignInWithApple } from '@ionic-native/sign-in-with-apple/ngx';
+
 
 const firebaseUiAuthConfig: firebaseui.auth.Config = {
   signInFlow: 'popup',
@@ -73,6 +75,7 @@ const firebaseUiAuthConfig: firebaseui.auth.Config = {
     FirebaseUIModule.forRoot(firebaseUiAuthConfig)
   ],
   providers: [
+    SignInWithApple,
     HttpClient,
     StatusBar,
     SplashScreen,
