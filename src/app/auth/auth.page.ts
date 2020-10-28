@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 import { FormGroup, FormControl } from '@angular/forms';
+import { Plugins } from '@capacitor/core';
+import { async } from '@angular/core/testing';
+const { Device, signInWithApple } = Plugins;
 
 @Component({
   selector: 'app-auth',
@@ -16,14 +19,20 @@ export class AuthPage implements OnInit
     password: new FormControl('')
   });
 
+  user = null;
+  // Variable de verificación de plataforma (Andorid | IOS) default -> false
+  showAppleSignIn = true;
   constructor(
     private authService: AuthService,
     private router: Router 
   ) 
   { }
 
-  ngOnInit() 
+  async ngOnInit() 
   {
+    const device = await Device.getInfo();
+    //Verifica cual si la plataforma es ios para mostrar el log in con apple
+    //this.showAppleSignIn = device.platform === 'ios';
   }
 
   /**
@@ -56,6 +65,22 @@ export class AuthPage implements OnInit
   loginWithFacebook()
   {
     this.authService.loginWithFacebook();
+  }
+
+
+  /**
+   * Iniciar sesión con apple
+   */
+  openAppleSignIn() {
+    signInWithApple.Authorize().then(async res => {
+      if (res.response && res.response.identityToken) {
+        this.authService.loginWithApple(res.response);
+      } else {
+        alert("Could not be logged");
+      }
+    }).catch(response=>{
+      alert("There is not an ios a response");
+    });
   }
 
 

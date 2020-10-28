@@ -38,7 +38,7 @@
   <div class="marg-btn">
     <ion-button color="danger" expand="block" (click)="loginWithGoogle()">
       <ion-icon slot="start" name="logo-google"></ion-icon>
-      Google
+      Google 
     </ion-button>
   </div>
 
@@ -46,6 +46,13 @@
     <ion-button expand="block" (click)="loginWithFacebook()">
       <ion-icon slot="start" name="logo-facebook"></ion-icon>
       Facebook
+    </ion-button>
+  </div>
+
+  <div class="marg-btn">
+    <ion-button color="dark" expand="block" (click)="openAppleSignIn()" *ngIf = "showAppleSignIn">
+      <ion-icon expand="full" name="logo-apple" slot="start"></ion-icon>
+      Apple
     </ion-button>
   </div>
 
