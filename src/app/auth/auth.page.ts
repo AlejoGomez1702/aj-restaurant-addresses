@@ -5,6 +5,7 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { Plugins } from '@capacitor/core';
 import { async } from '@angular/core/testing';
 const { Device, signInWithApple } = Plugins;
+import { SignInWithApple, AppleSignInResponse, AppleSignInErrorResponse, ASAuthorizationAppleIDRequest } from '@ionic-native/sign-in-with-apple/ngx';
 
 @Component({
   selector: 'app-auth',
@@ -24,7 +25,8 @@ export class AuthPage implements OnInit
   showAppleSignIn = true;
   constructor(
     private authService: AuthService,
-    private router: Router 
+    private router: Router,
+    private signInWithApple: SignInWithApple
   ) 
   { }
 
@@ -71,17 +73,34 @@ export class AuthPage implements OnInit
   /**
    * Iniciar sesión con apple
    */
-  openAppleSignIn() {
-    signInWithApple.Authorize().then(async res => {
-      alert(res);
-      if (res.response && res.response.identityToken) {
-        this.authService.loginWithApple(res.response);
-      } else {
-        alert("Could not be logged");
-      }
-    }).catch(response=>{
-      alert("There is not an ios a response");
+  openAppleSignIn() 
+  {
+    this.signInWithApple.signin({
+      requestedScopes: [
+        ASAuthorizationAppleIDRequest.ASAuthorizationScopeFullName,
+        ASAuthorizationAppleIDRequest.ASAuthorizationScopeEmail
+      ]
+    })
+    .then((res: AppleSignInResponse) => {
+      // https://developer.apple.com/documentation/signinwithapplerestapi/verifying_a_user
+      alert('Send token to apple for verification: ' + res.identityToken);
+      console.log(res);
+    })
+    .catch((error: AppleSignInErrorResponse) => {
+      alert(error.code + ' ' + error.localizedDescription);
+      console.error(error);
     });
+
+    // signInWithApple.Authorize().then(async res => {
+    //   alert(res);
+    //   if (res.response && res.response.identityToken) {
+    //     this.authService.loginWithApple(res.response);
+    //   } else {
+    //     alert("Could not be logged");
+    //   }
+    // }).catch(response=>{
+    //   alert("There is not an ios a response");
+    // });
   }
 
 
