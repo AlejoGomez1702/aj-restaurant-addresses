@@ -128,11 +128,20 @@ export class AuthService
     console.log('credential:', credential);
 
     const userCredential = await this.afAuth.signInWithCredential(credential);
-
-    console.log('After sign in: ', userCredential);
-    alert('User given data: ' + userCredential);
-    //Guardar en la base de datos 
-    //this.updateUserData(userCredential.user, appleResponse.givenName, appleResponse.familyName);
+    if(userCredential)
+    {
+      //Guardar en la base de datos 
+      this.updateUserData(userCredential.user, appleResponse.givenName, appleResponse.familyName);
+      this.router.navigate(['/shopping-cart']);   
+    }
+    else
+    {
+      console.log('Error en la autenticación con apple');
+      this.router.navigate(['/shopping-cart']);   
+    }
+    // console.log('After sign in: ', userCredential);
+    // alert('User given data: ' + userCredential);
+    
   }
 
   async updateUserData(user, firstname, lastname) {

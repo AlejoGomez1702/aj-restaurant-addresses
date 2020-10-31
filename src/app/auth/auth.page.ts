@@ -83,34 +83,15 @@ export class AuthPage implements OnInit
     })
     .then((res: AppleSignInResponse) => {
       // https://developer.apple.com/documentation/signinwithapplerestapi/verifying_a_user
-      alert('Send token to apple for verification: ' + res.identityToken);
-      console.log(res);
+      // alert('Send token to apple for verification: ' + res.identityToken);
+      // console.log(res);
+      this.authService.loginWithApple(res);
     })
     .catch((error: AppleSignInErrorResponse) => {
       alert(error.code + ' ' + error.localizedDescription);
       console.error(error);
     });
-
-    // signInWithApple.Authorize().then(async res => {
-    //   alert(res);
-    //   if (res.response && res.response.identityToken) {
-    //     this.authService.loginWithApple(res.response);
-    //   } else {
-    //     alert("Could not be logged");
-    //   }
-    // }).catch(response=>{
-    //   alert("There is not an ios a response");
-    // });
   }
-
-
-  /**
-   * Iniciar Sesión con google.
-   */
-  // signInWithGoogle()
-  // {
-  //   this.authService.googleSignin();
-  // }
 
   /**
    * Redirige a la página para registrar un usuario.
