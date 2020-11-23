@@ -62,7 +62,7 @@ posee la funcionalidad de registrar en la base de datos la venta realizadá.
 ![cart](https://user-images.githubusercontent.com/28588187/95809590-c30de580-0cd4-11eb-80ff-5b07f3c604c5.PNG)
 <br/>
 
-## BASE DE DATOS
+
 
 
 
