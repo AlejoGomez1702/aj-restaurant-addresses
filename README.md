@@ -62,6 +62,12 @@ posee la funcionalidad de registrar en la base de datos la venta realizadá.
 ![cart](https://user-images.githubusercontent.com/28588187/95809590-c30de580-0cd4-11eb-80ff-5b07f3c604c5.PNG)
 <br/>
 
+### Modificación De Horarios
+
+El componente donde se encuentra la información del horario del restaurante se encuentra en la ruta **src/app/tab1/information/information.component.html**:
+<br/>
+![hour](https://user-images.githubusercontent.com/28588187/100104065-b207d680-2e33-11eb-9e8f-4d605d4d82f8.PNG)
+<br/>
 
 
 
